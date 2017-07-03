@@ -6,18 +6,6 @@ Application for text classification using neural networks.
 
 - Java SE Development Kit 8 (`jdk-1.8`)
 
-### Used Libraries
-
-- commons-collections4-4.1.jar
-- encog-core-3.3.0.jar
-- poi-3.16.jar
-- poi-ooxml-3.16.jar
-- poi-ooxml-schemas-3.16.jar
-- sqlite-jdbc-3.16.1.jar
-- xmlbeans-2.6.0.jar
-- hamcrest-core-1.3.jar
-- junit-4.12.jar
-
 ## Algorithm description
 
 ## Author
