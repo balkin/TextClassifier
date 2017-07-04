@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+// todo: add default configuration and create config file automatically
 public class Config {
   private static Config instance;
   private final Properties properties = new Properties();
