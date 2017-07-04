@@ -26,10 +26,7 @@ ngram_strategy | Text splitting algorithm | unigram, filtered_unigram, bigram, f
 ## Quick start guide
 
 1. When you launch application first time, it will ask you for XLSX-file with data for training. The file can include one or two sheets. First sheet should contain data for training, second sheet should contain data for testing of accurancy. File structure:
-<p align="center">
-  <img src="https://github.com/RusZ/TextClassifier/raw/master/images/xlsx_example.png" />
-</p>
-2. After that application will build vocabulary, will create and train neural network for each Characteristic.  
+2. After that application will build vocabulary, will create and train neural network for each Characteristic.
 3. Restart application and use it for text classification.
 
 ## Author
