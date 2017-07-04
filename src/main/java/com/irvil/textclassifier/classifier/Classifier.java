@@ -24,6 +24,7 @@ import java.util.Set;
 import static org.encog.persist.EncogDirectoryPersistence.loadObject;
 import static org.encog.persist.EncogDirectoryPersistence.saveObject;
 
+// todo: add other types of Classifiers (Naive Bayes classifier for example)
 public class Classifier implements Observable {
   private final Characteristic characteristic;
   private final int inputLayerSize;
@@ -151,7 +152,8 @@ public class Classifier implements Observable {
 
     Propagation train = new ResilientPropagation(network, new BasicMLDataSet(input, ideal));
     train.setThreadCount(16);
-
+    
+    // todo: throw exception if iteration count more than 1000
     do {
       train.iteration();
       notifyObservers("Training Classifier for '" + characteristic.getName() + "' characteristic. Errors: " + String.format("%.2f", train.getError() * 100) + "%. Wait...");

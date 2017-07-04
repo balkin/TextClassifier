@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+// todo: move all text messages to separate file (XML or ini)
+// todo: maybe don't save texts to database?
 public class MainWindow extends Application {
   private final Config config = Config.getInstance();
   private final List<Classifier> classifiers = new ArrayList<>();

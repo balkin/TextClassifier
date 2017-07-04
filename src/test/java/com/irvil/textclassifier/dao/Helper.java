@@ -7,6 +7,7 @@ import com.irvil.textclassifier.model.VocabularyWord;
 
 import java.util.*;
 
+// todo: use DBUnit + H2 or HSQLDB
 class Helper {
   static void fillStorageWithTestData(StorageCreator storageCreator, CharacteristicDAO characteristicDAO, ClassifiableTextDAO classifiableTextDAO, VocabularyWordDAO vocabularyWordDAO) throws Exception {
     storageCreator.createStorage();

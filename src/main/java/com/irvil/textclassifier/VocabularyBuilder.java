@@ -27,8 +27,7 @@ class VocabularyBuilder {
     }
 
     Map<String, Integer> uniqueValues = new HashMap<>();
-    List<VocabularyWord> vocabulary = new ArrayList<>();
-
+    
     // count frequency of use each word (converted to n-gram) from all Classifiable Texts
     //
 
@@ -46,6 +45,8 @@ class VocabularyBuilder {
 
     // convert uniqueValues to Vocabulary, excluding infrequent
     //
+    
+    List<VocabularyWord> vocabulary = new ArrayList<>();
 
     for (Map.Entry<String, Integer> entry : uniqueValues.entrySet()) {
       if (entry.getValue() > 3) {
@@ -53,6 +54,7 @@ class VocabularyBuilder {
       }
     }
 
+    // todo: throw exception if vocabulary is empty
     return vocabulary;
   }
 }

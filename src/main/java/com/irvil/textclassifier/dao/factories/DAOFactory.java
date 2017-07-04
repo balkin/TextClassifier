@@ -8,6 +8,7 @@ import com.irvil.textclassifier.dao.VocabularyWordDAO;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCConnector;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCSQLiteConnector;
 
+// todo: add other DAOs (Hibernate for example)
 public interface DAOFactory {
   static DAOFactory getDaoFactory(Config config) {
     DAOFactory daoFactory = null;
