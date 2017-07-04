@@ -30,6 +30,7 @@ ngram_strategy | Text splitting algorithm | unigram, filtered_unigram, bigram, f
   <img src="https://github.com/RusZ/TextClassifier/raw/master/images/xlsx_example.png" />
 </p>
 2. After that application will build vocabulary, will create and train neural network for each Characteristic.
+
 3. Restart application and use it for text classification.
 
 ## Author
