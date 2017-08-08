@@ -30,7 +30,7 @@ import java.util.*;
 // todo: move all text messages to separate file (XML or ini)
 // todo: maybe don't save texts to database?
 public class MainWindow extends Application {
-  private final Config config = Config.getInstance("./config/config.ini");
+  private final Config config = new Config("./config/config.ini");
   private final List<Classifier> classifiers = new ArrayList<>();
   private LogWindow logWindow;
   private DAOFactory daoFactory;

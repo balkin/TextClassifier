@@ -8,28 +8,18 @@ import java.util.Properties;
 
 // todo: add default configuration and create config file automatically
 public class Config {
-  private static Config instance;
   private final Properties properties = new Properties();
 
-  private Config() {
+  public Config(String fileName) {
     // read config file
-    try (InputStream inputStream = new FileInputStream(new File("./config/config.ini"))) {
+    try (InputStream inputStream = new FileInputStream(new File(fileName))) {
       properties.load(inputStream);
     } catch (IOException ignored) {
 
     }
   }
 
-  static Config getInstance() {
-    // create only one object - Singleton pattern
-    if (instance == null) {
-      instance = new Config();
-    }
-
-    return instance;
-  }
-
-  boolean isLoaded() {
+  public boolean isLoaded() {
     return properties.size() > 0;
   }
 
@@ -45,8 +35,8 @@ public class Config {
     return getProperty("dbms_type");
   }
 
-  public String getSQLiteDbFileName() {
-    return getProperty("sqlite_db_filename");
+  public String getDbFileName() {
+    return getProperty("db_filename");
   }
 
   public String getNGramStrategy() {
