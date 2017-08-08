@@ -1,5 +1,6 @@
 package com.irvil.textclassifier.dao;
 
+import com.irvil.textclassifier.dao.factories.DAOFactory;
 import com.irvil.textclassifier.model.Characteristic;
 import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
@@ -7,11 +8,14 @@ import com.irvil.textclassifier.model.VocabularyWord;
 
 import java.util.*;
 
-// todo: use DBUnit + H2 or HSQLDB
 class Helper {
-  static void fillStorageWithTestData(StorageCreator storageCreator, CharacteristicDAO characteristicDAO, ClassifiableTextDAO classifiableTextDAO, VocabularyWordDAO vocabularyWordDAO) throws Exception {
+  static void fillStorageWithTestData(DAOFactory daoFactory) throws Exception {
+    StorageCreator storageCreator = daoFactory.storageCreator();
+    CharacteristicDAO characteristicDAO = daoFactory.characteristicDAO();
+    ClassifiableTextDAO classifiableTextDAO = daoFactory.classifiableTextDAO();
+    VocabularyWordDAO vocabularyWordDAO =  daoFactory.vocabularyWordDAO();
+
     storageCreator.createStorage();
-    storageCreator.clearStorage();
 
     // fill Module characteristic
     //

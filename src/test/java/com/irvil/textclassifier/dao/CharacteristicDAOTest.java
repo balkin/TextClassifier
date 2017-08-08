@@ -1,5 +1,6 @@
 package com.irvil.textclassifier.dao;
 
+import com.irvil.textclassifier.dao.factories.DAOFactory;
 import com.irvil.textclassifier.model.Characteristic;
 import com.irvil.textclassifier.model.CharacteristicValue;
 import org.junit.Before;
@@ -13,18 +14,16 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 public abstract class CharacteristicDAOTest {
-  protected StorageCreator storageCreator;
-  protected CharacteristicDAO characteristicDAO;
-  protected ClassifiableTextDAO classifiableTextDAO;
-  protected VocabularyWordDAO vocabularyWordDAO;
+  private CharacteristicDAO characteristicDAO;
 
   @Before
   public void setUp() throws Exception {
-    initializeDAO();
-    Helper.fillStorageWithTestData(storageCreator, characteristicDAO, classifiableTextDAO, vocabularyWordDAO);
+    DAOFactory daoFactory = createDAOFactory();
+    characteristicDAO = daoFactory.characteristicDAO();
+    Helper.fillStorageWithTestData(daoFactory);
   }
 
-  protected abstract void initializeDAO();
+  protected abstract DAOFactory createDAOFactory();
 
   @Test
   public void getAllCharacteristics() throws Exception {
