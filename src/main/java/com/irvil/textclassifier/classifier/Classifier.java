@@ -152,7 +152,7 @@ public class Classifier implements Observable {
 
     Propagation train = new ResilientPropagation(network, new BasicMLDataSet(input, ideal));
     train.setThreadCount(16);
-    
+
     // todo: throw exception if iteration count more than 1000
     do {
       train.iteration();
