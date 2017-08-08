@@ -11,7 +11,8 @@ Application for text classification using neural networks.
 - Encog Machine Learning Framework (`org.encog:encog-core:3.3.0`)
 - Apache POI (`org.apache.poi:poi-ooxml:3.16`)
 - SQLiteJDBC (`org.xerial:sqlite-jdbc:3.19.3`)
-- JUnit 4.12 (`junit:junit:4.12`)
+- JUnit (`junit:junit:4.12`)
+- H2 Database Engine (`com.h2database:h2:1.4.196`)
 
 ## Config.ini file description
 
@@ -19,8 +20,8 @@ Parameter | Description | Possible values
 ------------ | ------------- | -------------
 db_path | Path for database files and trained classifiers | Example: ./db
 dao_type | Method of data storage and access | jdbc
-dbms_type | Database management system | sqlite
-sqlite_db_filename | SQLite database name | Example: TextClassifier.db
+dbms_type | Database management system | sqlite, h2
+db_filename | Database name | Example: TextClassifier
 ngram_strategy | Text splitting algorithm | unigram, filtered_unigram, bigram, filtered_bigram
 
 ## Quick start guide
