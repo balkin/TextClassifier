@@ -8,6 +8,4 @@ public interface StorageCreator {
   }
 
   void createStorage();
-
-  void clearStorage();
 }

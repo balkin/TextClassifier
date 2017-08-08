@@ -1,6 +1,7 @@
 package com.irvil.textclassifier.dao.jdbc.connectors;
 
-import java.io.File;
+import org.h2.tools.DeleteDbFiles;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,31 +9,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCSQLiteConnector implements JDBCConnector {
+public class JDBCH2Connector implements JDBCConnector {
+  private final String dbPath;
+  private final String dbFileName;
   private final String dbName;
 
-  public JDBCSQLiteConnector(String dbPath, String dbFileName) {
+  public JDBCH2Connector(String dbPath, String dbFileName) {
     if (dbFileName == null || dbFileName.equals("")) {
       throw new IllegalArgumentException();
     }
 
+    this.dbPath = dbPath;
+    this.dbFileName = dbFileName;
     this.dbName = dbPath + "/" + dbFileName;
   }
 
   @Override
   public Connection getConnection() throws SQLException {
     try {
-      Class.forName("org.sqlite.JDBC");
+      Class.forName("org.h2.Driver");
     } catch (ClassNotFoundException ignored) {
     }
 
-    return DriverManager.getConnection("jdbc:sqlite:" + dbName);
+    return DriverManager.getConnection("jdbc:h2:" + dbName);
   }
 
   @Override
   public void createStorage() {
     // delete old database file
-    new File(dbName).delete();
+    DeleteDbFiles.execute(dbPath, dbFileName, true);
 
     List<String> sqlQueries = new ArrayList<>();
 
@@ -40,15 +45,15 @@ public class JDBCSQLiteConnector implements JDBCConnector {
     //
 
     sqlQueries.add("CREATE TABLE CharacteristicsNames " +
-        "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT UNIQUE )");
+        "(Id INT AUTO_INCREMENT PRIMARY KEY, Name CLOB )");
     sqlQueries.add("CREATE TABLE CharacteristicsValues " +
-        "( Id INTEGER, CharacteristicsNameId INTEGER, Value TEXT, PRIMARY KEY(Id,CharacteristicsNameId,Value) )");
+        "(Id INT, CharacteristicsNameId INT, Value CLOB, PRIMARY KEY(Id, CharacteristicsNameId))");
     sqlQueries.add("CREATE TABLE ClassifiableTexts " +
-        "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Text TEXT )");
+        "(Id INT AUTO_INCREMENT PRIMARY KEY, Text CLOB)");
     sqlQueries.add("CREATE TABLE ClassifiableTextsCharacteristics " +
-        "( ClassifiableTextId INTEGER, CharacteristicsNameId INTEGER, CharacteristicsValueId INTEGER, PRIMARY KEY(ClassifiableTextId,CharacteristicsNameId,CharacteristicsValueId) )");
+        "(ClassifiableTextId INT, CharacteristicsNameId INT, CharacteristicsValueId INT, PRIMARY KEY(ClassifiableTextId, CharacteristicsNameId, CharacteristicsValueId))");
     sqlQueries.add("CREATE TABLE Vocabulary " +
-        "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Value TEXT UNIQUE )");
+        "(Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB)");
 
     // execute queries
     //

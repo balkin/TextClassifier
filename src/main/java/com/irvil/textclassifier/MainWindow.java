@@ -1,5 +1,6 @@
 package com.irvil.textclassifier;
 
+import com.irvil.textclassifier.classifier.Classifier;
 import com.irvil.textclassifier.dao.*;
 import com.irvil.textclassifier.dao.factories.DAOFactory;
 import com.irvil.textclassifier.model.Characteristic;
@@ -7,7 +8,6 @@ import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
 import com.irvil.textclassifier.model.VocabularyWord;
 import com.irvil.textclassifier.ngram.NGramStrategy;
-import com.irvil.textclassifier.classifier.Classifier;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -30,7 +30,7 @@ import java.util.*;
 // todo: move all text messages to separate file (XML or ini)
 // todo: maybe don't save texts to database?
 public class MainWindow extends Application {
-  private final Config config = Config.getInstance();
+  private final Config config = Config.getInstance("./config/config.ini");
   private final List<Classifier> classifiers = new ArrayList<>();
   private LogWindow logWindow;
   private DAOFactory daoFactory;
@@ -191,7 +191,6 @@ public class MainWindow extends Application {
     StorageCreator storageCreator = daoFactory.storageCreator();
     storageCreator.createStorageFolder(config.getDbPath());
     storageCreator.createStorage();
-    storageCreator.clearStorage();
     logWindow.update("Storage created. Wait...");
   }
 

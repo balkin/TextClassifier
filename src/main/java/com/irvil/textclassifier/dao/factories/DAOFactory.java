@@ -6,9 +6,9 @@ import com.irvil.textclassifier.dao.ClassifiableTextDAO;
 import com.irvil.textclassifier.dao.StorageCreator;
 import com.irvil.textclassifier.dao.VocabularyWordDAO;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCConnector;
+import com.irvil.textclassifier.dao.jdbc.connectors.JDBCH2Connector;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCSQLiteConnector;
 
-// todo: add other DAOs (Hibernate for example)
 public interface DAOFactory {
   static DAOFactory getDaoFactory(Config config) {
     DAOFactory daoFactory = null;
@@ -24,7 +24,11 @@ public interface DAOFactory {
         JDBCConnector jdbcConnector = null;
 
         if (config.getDBMSType().equals("sqlite")) {
-          jdbcConnector = new JDBCSQLiteConnector(config.getDbPath() + "/" + config.getSQLiteDbFileName());
+          jdbcConnector = new JDBCSQLiteConnector(config.getDbPath(), config.getDbFileName());
+        }
+
+        if (config.getDBMSType().equals("h2")) {
+          jdbcConnector = new JDBCH2Connector(config.getDbPath(), config.getDbFileName());
         }
 
         // create factory
