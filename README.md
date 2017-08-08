@@ -13,6 +13,7 @@ Application for text classification using neural networks.
 - SQLiteJDBC (`org.xerial:sqlite-jdbc:3.19.3`)
 - JUnit (`junit:junit:4.12`)
 - H2 Database Engine (`com.h2database:h2:1.4.196`)
+- Mockito (`org.mockito:mockito-core:2.8.47`)
 
 ## Config.ini file description
 
