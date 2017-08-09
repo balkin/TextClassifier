@@ -1,11 +1,21 @@
 package com.irvil.textclassifier.model;
 
+import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "CHARACTERISTICSNAMES")
 public class Characteristic {
-  private final String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
   private int id;
+
+  @Column(name = "NAME")
+  private String name;
+
+  @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL)
   private Set<CharacteristicValue> possibleValues;
 
   private Characteristic(int id, String name, Set<CharacteristicValue> possibleValues) {
