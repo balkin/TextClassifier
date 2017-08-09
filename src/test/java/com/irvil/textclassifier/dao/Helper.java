@@ -13,7 +13,7 @@ class Helper {
     StorageCreator storageCreator = daoFactory.storageCreator();
     CharacteristicDAO characteristicDAO = daoFactory.characteristicDAO();
     ClassifiableTextDAO classifiableTextDAO = daoFactory.classifiableTextDAO();
-    VocabularyWordDAO vocabularyWordDAO =  daoFactory.vocabularyWordDAO();
+    VocabularyWordDAO vocabularyWordDAO = daoFactory.vocabularyWordDAO();
 
     storageCreator.createStorage();
 
