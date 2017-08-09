@@ -76,6 +76,9 @@ public class JDBCCharacteristicDAO implements CharacteristicDAO {
         // insert possible values
         //
 
+        characteristic.getPossibleValues().remove(null);
+        characteristic.getPossibleValues().remove(new CharacteristicValue(""));
+
         for (CharacteristicValue possibleValue : characteristic.getPossibleValues()) {
           insertPossibleValue(con, characteristic, possibleValue);
         }
@@ -111,26 +114,22 @@ public class JDBCCharacteristicDAO implements CharacteristicDAO {
   }
 
   private void insertPossibleValue(Connection con, Characteristic characteristic, CharacteristicValue characteristicValue) throws SQLException {
-    if (characteristicValue != null &&
-        !characteristicValue.getValue().equals("")) {
+    // try to find Value in DB
+    int newCharacteristicValueId = searchCharacteristicPossibleValue(con, characteristic, characteristicValue);
 
-      // try to find Value in DB
-      int newCharacteristicValueId = searchCharacteristicPossibleValue(con, characteristic, characteristicValue);
+    if (newCharacteristicValueId == -1) { // not found -> insert it
+      newCharacteristicValueId = getLastCharacteristicPossibleValueId(con, characteristic) + 1;
 
-      if (newCharacteristicValueId == -1) { // not found -> insert it
-        newCharacteristicValueId = getLastCharacteristicPossibleValueId(con, characteristic) + 1;
-
-        String sqlInsert = "INSERT INTO CharacteristicsValues (Id, CharacteristicsNameId, Value) VALUES (?, ?, ?)";
-        PreparedStatement statement = con.prepareStatement(sqlInsert);
-        statement.setInt(1, newCharacteristicValueId);
-        statement.setInt(2, characteristic.getId());
-        statement.setString(3, characteristicValue.getValue());
-        statement.executeUpdate();
-      }
-
-      // set inserted row Id to CharacteristicValue
-      characteristicValue.setId(newCharacteristicValueId);
+      String sqlInsert = "INSERT INTO CharacteristicsValues (Id, CharacteristicsNameId, Value) VALUES (?, ?, ?)";
+      PreparedStatement statement = con.prepareStatement(sqlInsert);
+      statement.setInt(1, newCharacteristicValueId);
+      statement.setInt(2, characteristic.getId());
+      statement.setString(3, characteristicValue.getValue());
+      statement.executeUpdate();
     }
+
+    // set inserted row Id to CharacteristicValue
+    characteristicValue.setId(newCharacteristicValueId);
   }
 
   private int searchCharacteristicPossibleValue(Connection con, Characteristic characteristic, CharacteristicValue characteristicValue) throws SQLException {
