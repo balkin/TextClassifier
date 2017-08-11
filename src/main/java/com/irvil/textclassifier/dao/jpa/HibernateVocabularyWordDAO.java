@@ -61,10 +61,7 @@ public class HibernateVocabularyWordDAO implements VocabularyWordDAO {
       transaction = manager.getTransaction();
       transaction.begin();
 
-      Set<VocabularyWord> vocabularyUnique = new LinkedHashSet<>();
-      vocabularyUnique.addAll(vocabulary);
-
-      for (VocabularyWord vocabularyWord : vocabularyUnique) {
+      for (VocabularyWord vocabularyWord : new LinkedHashSet<>(vocabulary)) {
         if (vocabularyWord != null &&
             !vocabularyWord.getValue().equals("") &&
             !isVocabularyWordExistsInDB(vocabularyWord)) {

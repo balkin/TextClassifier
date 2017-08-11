@@ -24,7 +24,7 @@ public class HibernateCharacteristicDAO implements CharacteristicDAO {
 
   @Override
   public List<Characteristic> getAllCharacteristics() {
-    Set<Characteristic> characteristics = new LinkedHashSet<>();
+    Set<Characteristic> characteristicsWithoutDuplicates = new LinkedHashSet<>();
     EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
@@ -32,7 +32,7 @@ public class HibernateCharacteristicDAO implements CharacteristicDAO {
       transaction = manager.getTransaction();
       transaction.begin();
 
-      characteristics.addAll(manager.createQuery("SELECT c FROM Characteristic c JOIN c.possibleValues v", Characteristic.class).getResultList());
+      characteristicsWithoutDuplicates.addAll(manager.createQuery("SELECT c FROM Characteristic c JOIN c.possibleValues v", Characteristic.class).getResultList());
 
       transaction.commit();
     } catch (Exception e) {
@@ -45,9 +45,9 @@ public class HibernateCharacteristicDAO implements CharacteristicDAO {
       manager.close();
     }
 
-    List<Characteristic> characteristicsList = new ArrayList<>();
-    characteristicsList.addAll(characteristics);
-    return characteristicsList;
+    List<Characteristic> characteristics = new ArrayList<>();
+    characteristics.addAll(characteristicsWithoutDuplicates);
+    return characteristics;
   }
 
   @Override

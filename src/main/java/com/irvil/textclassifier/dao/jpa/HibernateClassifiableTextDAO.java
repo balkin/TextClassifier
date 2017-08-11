@@ -9,7 +9,6 @@ import com.irvil.textclassifier.model.ClassifiableText;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import java.sql.SQLException;
 import java.util.*;
 
 public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
@@ -65,7 +64,6 @@ public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
       transaction = manager.getTransaction();
       transaction.begin();
 
-
       for (ClassifiableText classifiableText : classifiableTexts) {
         if (classifiableText != null &&
             !classifiableText.getText().equals("") &&
@@ -76,16 +74,13 @@ public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
             throw new NotExistsException("Characteristic value not exists");
           }
 
-          // insert
-          //
-
           manager.persist(classifiableText);
         }
       }
 
       transaction.commit();
     } catch (NotExistsException e) {
-      throw new NotExistsException("Characteristic value not exists");
+      throw e;
     } catch (Exception e) {
       if (transaction != null) {
         transaction.rollback();
@@ -95,30 +90,33 @@ public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
     } finally {
       manager.close();
     }
-
   }
 
-  private boolean fillCharacteristicNamesAndValuesIDs(ClassifiableText classifiableText) throws SQLException {
-    //todo: refactor
+  private boolean fillCharacteristicNamesAndValuesIDs(ClassifiableText classifiableText) {
     for (Map.Entry<Characteristic, CharacteristicValue> entry : classifiableText.getCharacteristics().entrySet()) {
       Characteristic characteristic = new HibernateCharacteristicDAO(entityManagerFactory).findCharacteristicByName(entry.getKey().getName());
-      boolean isFound = false;
 
       if (characteristic == null) {
         return false;
       }
 
+      // fill characteristic id from DB
       entry.getKey().setId(characteristic.getId());
+
+      // fill characteristic value id and order number from DB
+      //
+
+      boolean characteristicValueIsFound = false;
 
       for (CharacteristicValue characteristicValue : characteristic.getPossibleValues()) {
         if (characteristicValue.getValue().equals(entry.getValue().getValue())) {
           entry.getValue().setId(characteristicValue.getId());
           entry.getValue().setOrderNumber(characteristicValue.getOrderNumber());
-          isFound = true;
+          characteristicValueIsFound = true;
         }
       }
 
-      if (!isFound) {
+      if (!characteristicValueIsFound) {
         return false;
       }
     }
