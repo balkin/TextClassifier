@@ -1,11 +1,15 @@
 package com.irvil.textclassifier.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "CHARACTERISTICSNAMES")
+@NamedQuery(name = "Characteristic.findByName", query = "SELECT c FROM Characteristic c WHERE c.name=:characteristicName")
 public class Characteristic {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +19,11 @@ public class Characteristic {
   @Column(name = "NAME")
   private String name;
 
-  @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<CharacteristicValue> possibleValues;
+
+  public Characteristic() {
+  }
 
   private Characteristic(int id, String name, Set<CharacteristicValue> possibleValues) {
     this.id = id;

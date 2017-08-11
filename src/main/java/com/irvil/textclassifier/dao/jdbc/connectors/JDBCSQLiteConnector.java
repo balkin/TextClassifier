@@ -1,6 +1,5 @@
 package com.irvil.textclassifier.dao.jdbc.connectors;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -31,24 +30,36 @@ public class JDBCSQLiteConnector implements JDBCConnector {
 
   @Override
   public void createStorage() {
-    // delete old database file
-    new File(dbName).delete();
-
     List<String> sqlQueries = new ArrayList<>();
 
     // create database structure
     //
 
-    sqlQueries.add("CREATE TABLE CharacteristicsNames " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsNames " +
         "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT UNIQUE )");
-    sqlQueries.add("CREATE TABLE CharacteristicsValues " +
-        "( Id INTEGER, CharacteristicsNameId INTEGER, Value TEXT, PRIMARY KEY(Id,CharacteristicsNameId,Value) )");
-    sqlQueries.add("CREATE TABLE ClassifiableTexts " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsValues " +
+        "( Id INTEGER PRIMARY KEY AUTOINCREMENT, OrderNumber INTEGER, CharacteristicsNameId INTEGER, Value TEXT)");
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTexts " +
         "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Text TEXT )");
-    sqlQueries.add("CREATE TABLE ClassifiableTextsCharacteristics " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTextsCharacteristics " +
         "( ClassifiableTextId INTEGER, CharacteristicsNameId INTEGER, CharacteristicsValueId INTEGER, PRIMARY KEY(ClassifiableTextId,CharacteristicsNameId,CharacteristicsValueId) )");
-    sqlQueries.add("CREATE TABLE Vocabulary " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS Vocabulary " +
         "( Id INTEGER PRIMARY KEY AUTOINCREMENT, Value TEXT UNIQUE )");
+
+    // clear all tables
+    //
+
+    sqlQueries.add("DELETE FROM Vocabulary");
+    sqlQueries.add("DELETE FROM ClassifiableTextsCharacteristics");
+    sqlQueries.add("DELETE FROM ClassifiableTexts");
+    sqlQueries.add("DELETE FROM CharacteristicsValues");
+    sqlQueries.add("DELETE FROM CharacteristicsNames");
+
+    // reset all autoincrement keys
+    //
+
+    sqlQueries.add("DELETE FROM sqlite_sequence WHERE name IN ('CharacteristicsNames' , " +
+        "'CharacteristicsValues', 'ClassifiableTexts', 'ClassifiableTextsCharacteristics', 'Vocabulary')");
 
     // execute queries
     //

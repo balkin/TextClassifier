@@ -112,7 +112,7 @@ public class ClassifierTest {
     ClassifiableText ctGet = new ClassifiableText("Returns the element at the specified position in this list");
     CharacteristicValue cvGet = classifier.classify(ctGet);
 
-    assertEquals(cvGet.getId(), 1);
+    assertEquals(cvGet.getOrderNumber(), 1);
     assertEquals(cvGet.getValue(), "get");
 
     //
@@ -120,7 +120,7 @@ public class ClassifierTest {
     ClassifiableText ctSet = new ClassifiableText("Replaces the element at the specified position in this list with the specified element (optional operation)");
     CharacteristicValue cvSet = classifier.classify(ctSet);
 
-    assertEquals(cvSet.getId(), 2);
+    assertEquals(cvSet.getOrderNumber(), 2);
     assertEquals(cvSet.getValue(), "set");
 
     //
@@ -128,7 +128,7 @@ public class ClassifierTest {
     ClassifiableText ctAdd = new ClassifiableText("Inserts the specified element at the specified position in this list (optional operation). Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices)");
     CharacteristicValue cvAdd = classifier.classify(ctAdd);
 
-    assertEquals(cvAdd.getId(), 3);
+    assertEquals(cvAdd.getOrderNumber(), 3);
     assertEquals(cvAdd.getValue(), "add");
   }
 

@@ -35,44 +35,14 @@ public abstract class VocabularyWordDAOTest {
     assertEquals(vocabularyWords.get(1).getValue(), "Test 2");
   }
 
-  @Test(expected = EmptyRecordException.class)
-  public void addNullVocabulary() throws Exception {
-    vocabularyWordDAO.addAll(null);
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addEmptyVocabulary() throws Exception {
-    vocabularyWordDAO.addAll(new ArrayList<>());
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addNullWord() throws Exception {
-    List<VocabularyWord> vocabulary = new ArrayList<>();
-    vocabulary.add(new VocabularyWord("Test"));
-    vocabulary.add(null);
-    vocabularyWordDAO.addAll(vocabulary);
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addEmptyWord() throws Exception {
-    List<VocabularyWord> vocabulary = new ArrayList<>();
-    vocabulary.add(new VocabularyWord("Test"));
-    vocabulary.add(new VocabularyWord(""));
-    vocabularyWordDAO.addAll(vocabulary);
-  }
-
-  @Test(expected = AlreadyExistsException.class)
-  public void addExisted() throws Exception {
-    List<VocabularyWord> vocabulary = new ArrayList<>();
-    vocabulary.add(new VocabularyWord("Test"));
-    vocabulary.add(new VocabularyWord("Test 1")); // existed
-    vocabularyWordDAO.addAll(vocabulary);
-  }
-
   @Test
   public void add() throws Exception {
     List<VocabularyWord> vocabulary = new ArrayList<>();
+    vocabulary.add(new VocabularyWord("Test 1"));
     vocabulary.add(new VocabularyWord("Test 3"));
+    vocabulary.add(new VocabularyWord("Test 3"));
+    vocabulary.add(new VocabularyWord(""));
+    vocabulary.add(null);
     vocabularyWordDAO.addAll(vocabulary);
 
     // check record from DB

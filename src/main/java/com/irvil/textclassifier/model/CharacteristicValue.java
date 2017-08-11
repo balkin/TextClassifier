@@ -6,8 +6,12 @@ import javax.persistence.*;
 @Table(name = "CHARACTERISTICSVALUES")
 public class CharacteristicValue {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID")
   private int id;
+
+  @Column(name = "OrderNumber")
+  private int orderNumber;
 
   @Column(name = "VALUE")
   private String value;
@@ -16,8 +20,11 @@ public class CharacteristicValue {
   @JoinColumn(name = "CHARACTERISTICSNAMEID", nullable = false)
   private Characteristic characteristic;
 
-  public CharacteristicValue(int id, String value) {
-    this.id = id;
+  public CharacteristicValue() {
+  }
+
+  public CharacteristicValue(int orderNumber, String value) {
+    this.orderNumber = orderNumber;
     this.value = value;
   }
 
@@ -27,6 +34,14 @@ public class CharacteristicValue {
 
   public void setCharacteristic(Characteristic characteristic) {
     this.characteristic = characteristic;
+  }
+
+  public int getOrderNumber() {
+    return orderNumber;
+  }
+
+  public void setOrderNumber(int orderNumber) {
+    this.orderNumber = orderNumber;
   }
 
   public int getId() {

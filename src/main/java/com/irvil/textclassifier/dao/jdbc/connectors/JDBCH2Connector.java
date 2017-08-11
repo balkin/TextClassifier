@@ -1,7 +1,5 @@
 package com.irvil.textclassifier.dao.jdbc.connectors;
 
-import org.h2.tools.DeleteDbFiles;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -36,24 +34,38 @@ public class JDBCH2Connector implements JDBCConnector {
 
   @Override
   public void createStorage() {
-    // delete old database file
-    DeleteDbFiles.execute(dbPath, dbFileName, true);
-
     List<String> sqlQueries = new ArrayList<>();
 
     // create database structure
     //
 
-    sqlQueries.add("CREATE TABLE CharacteristicsNames " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsNames " +
         "(Id INT AUTO_INCREMENT PRIMARY KEY, Name CLOB )");
-    sqlQueries.add("CREATE TABLE CharacteristicsValues " +
-        "(Id INT, CharacteristicsNameId INT, Value CLOB, PRIMARY KEY(Id, CharacteristicsNameId))");
-    sqlQueries.add("CREATE TABLE ClassifiableTexts " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsValues " +
+        "(Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB)");
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTexts " +
         "(Id INT AUTO_INCREMENT PRIMARY KEY, Text CLOB)");
-    sqlQueries.add("CREATE TABLE ClassifiableTextsCharacteristics " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTextsCharacteristics " +
         "(ClassifiableTextId INT, CharacteristicsNameId INT, CharacteristicsValueId INT, PRIMARY KEY(ClassifiableTextId, CharacteristicsNameId, CharacteristicsValueId))");
-    sqlQueries.add("CREATE TABLE Vocabulary " +
+    sqlQueries.add("CREATE TABLE IF NOT EXISTS Vocabulary " +
         "(Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB)");
+
+    // clear all tables
+    //
+
+    sqlQueries.add("DELETE FROM Vocabulary");
+    sqlQueries.add("DELETE FROM ClassifiableTextsCharacteristics");
+    sqlQueries.add("DELETE FROM ClassifiableTexts");
+    sqlQueries.add("DELETE FROM CharacteristicsValues");
+    sqlQueries.add("DELETE FROM CharacteristicsNames");
+
+    // reset all autoincrement keys
+    //
+
+    sqlQueries.add("ALTER TABLE CharacteristicsNames ALTER COLUMN Id RESTART WITH 1");
+    sqlQueries.add("ALTER TABLE CharacteristicsValues ALTER COLUMN Id RESTART WITH 1");
+    sqlQueries.add("ALTER TABLE ClassifiableTexts ALTER COLUMN Id RESTART WITH 1");
+    sqlQueries.add("ALTER TABLE Vocabulary ALTER COLUMN Id RESTART WITH 1");
 
     // execute queries
     //

@@ -33,6 +33,8 @@ public interface DAOFactory {
 
         // create factory
         daoFactory = new JDBCDAOFactory(jdbcConnector);
+      } else if (config.getDaoType().equals("hibernate")) {
+        daoFactory = new HibernateDAOFactory();
       }
     } catch (IllegalArgumentException e) {
       return null;

@@ -6,9 +6,11 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <!-- Entity classes -->
         <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:h2:tcp://localhost/C:\Users\r.zakaryaev\_data\projects\TextClassifier\db\h2_test_db;"/>
+                      value="jdbc:h2:tcp://localhost/C:\Users\r.zakaryaev\_data\projects\TextClassifier\db\hibernate_db;"/>
             <!-- <property name="javax.persistence.jdbc.url" value="jdbc:h2:./db/h2_test_db" /> -->
             <property name="javax.persistence.jdbc.user" value=""/>
             <property name="javax.persistence.jdbc.password" value=""/>

@@ -43,10 +43,10 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
   }
 
   @Override
-  public void addAll(List<ClassifiableText> classifiableTexts) throws EmptyRecordException, NotExistsException {
+  public void addAll(List<ClassifiableText> classifiableTexts) throws NotExistsException {
     if (classifiableTexts == null ||
         classifiableTexts.size() == 0) {
-      throw new EmptyRecordException("Classifiable texts is null or empty");
+      return;
     }
 
     try (Connection con = connector.getConnection()) {
@@ -64,38 +64,37 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
         // check
         //
 
-        if (classifiableText == null ||
-            classifiableText.getText().equals("") ||
-            classifiableText.getCharacteristics() == null ||
-            classifiableText.getCharacteristics().size() == 0) {
-          throw new EmptyRecordException("Classifiable text is null or empty");
-        }
+        if (classifiableText != null &&
+            !classifiableText.getText().equals("") &&
+            classifiableText.getCharacteristics() != null &&
+            classifiableText.getCharacteristics().size() != 0) {
 
-        if (!fillCharacteristicNamesAndValuesIDs(con, classifiableText)) {
-          throw new NotExistsException("Characteristic value not exists");
-        }
+          if (!fillCharacteristicNamesAndValuesIDs(con, classifiableText)) {
+            throw new NotExistsException("Characteristic value not exists");
+          }
 
-        // insert
-        //
-
-        statement.setString(1, classifiableText.getText());
-        statement.executeUpdate();
-        ResultSet generatedKeys = statement.getGeneratedKeys();
-
-        if (generatedKeys.next()) {
-          // save all characteristics to DB
+          // insert
           //
 
-          for (Map.Entry<Characteristic, CharacteristicValue> entry : classifiableText.getCharacteristics().entrySet()) {
-            insertToClassifiableTextsCharacteristicsTable(con, generatedKeys.getInt(1), entry.getKey(), entry.getValue());
+          statement.setString(1, classifiableText.getText());
+          statement.executeUpdate();
+          ResultSet generatedKeys = statement.getGeneratedKeys();
+
+          if (generatedKeys.next()) {
+            // save all characteristics to DB
+            //
+
+            for (Map.Entry<Characteristic, CharacteristicValue> entry : classifiableText.getCharacteristics().entrySet()) {
+              insertToClassifiableTextsCharacteristicsTable(con, generatedKeys.getInt(1), entry.getKey(), entry.getValue());
+            }
           }
         }
       }
 
       con.commit();
       con.setAutoCommit(true);
-    } catch (SQLException ignored) {
-      ignored.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
 
@@ -104,7 +103,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
 
     String sqlSelect = "SELECT CharacteristicsNames.Id AS CharacteristicId, " +
         "CharacteristicsNames.Name AS CharacteristicName, " +
-        "CharacteristicsValues.Id AS CharacteristicValueId, " +
+        "CharacteristicsValues.OrderNumber AS CharacteristicValueOrderNumber, " +
         "CharacteristicsValues.Value AS CharacteristicValue " +
         "FROM ClassifiableTextsCharacteristics " +
         "LEFT JOIN CharacteristicsNames " +
@@ -119,7 +118,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
 
     while (rs.next()) {
       Characteristic characteristic = new Characteristic(rs.getInt("CharacteristicId"), rs.getString("CharacteristicName"));
-      CharacteristicValue characteristicValue = new CharacteristicValue(rs.getInt("CharacteristicValueId"), rs.getString("CharacteristicValue"));
+      CharacteristicValue characteristicValue = new CharacteristicValue(rs.getInt("CharacteristicValueOrderNumber"), rs.getString("CharacteristicValue"));
       characteristics.put(characteristic, characteristicValue);
     }
 
@@ -141,7 +140,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
 
       if (rs.next()) {
         entry.getKey().setId(rs.getInt("CharacteristicId"));
-        entry.getValue().setId(rs.getInt("CharacteristicValueId"));
+        entry.getValue().setOrderNumber(rs.getInt("CharacteristicValueId"));
       } else {
         return false;
       }
@@ -155,7 +154,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
     PreparedStatement statement = con.prepareStatement(sqlInsert);
     statement.setInt(1, classifiableTextId);
     statement.setInt(2, characteristic.getId());
-    statement.setInt(3, characteristicValue.getId());
+    statement.setInt(3, characteristicValue.getOrderNumber());
     statement.executeUpdate();
   }
 }

@@ -8,10 +8,13 @@ public class VocabularyWord {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID")
-  private final int id;
+  private int id;
 
   @Column(name = "VALUE")
-  private final String value;
+  private String value;
+
+  public VocabularyWord() {
+  }
 
   public VocabularyWord(int id, String value) {
     this.id = id;

@@ -42,10 +42,10 @@ public class JDBCVocabularyWordDAO implements VocabularyWordDAO {
   }
 
   @Override
-  public void addAll(List<VocabularyWord> vocabulary) throws EmptyRecordException, AlreadyExistsException {
+  public void addAll(List<VocabularyWord> vocabulary) throws AlreadyExistsException {
     if (vocabulary == null ||
         vocabulary.size() == 0) {
-      throw new EmptyRecordException("Vocabulary is null or empty");
+      return;
     }
 
     try (Connection con = connector.getConnection()) {
@@ -60,23 +60,13 @@ public class JDBCVocabularyWordDAO implements VocabularyWordDAO {
       //
 
       for (VocabularyWord vocabularyWord : vocabulary) {
-        // check
-        //
+        if (vocabularyWord != null &&
+            !vocabularyWord.getValue().equals("") &&
+            !isVocabularyWordExistsInDB(con, vocabularyWord)) {
 
-        if (vocabularyWord == null ||
-            vocabularyWord.getValue().equals("")) {
-          throw new EmptyRecordException("Vocabulary word is null or empty");
+          statement.setString(1, vocabularyWord.getValue());
+          statement.executeUpdate();
         }
-
-        if (isVocabularyWordExistsInDB(con, vocabularyWord)) {
-          throw new AlreadyExistsException("Vocabulary word already exists");
-        }
-
-        // insert
-        //
-
-        statement.setString(1, vocabularyWord.getValue());
-        statement.executeUpdate();
       }
 
       con.commit();

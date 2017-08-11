@@ -229,7 +229,7 @@ public class MainWindow extends Application {
     try {
       classifiableTextDAO.addAll(classifiableTexts);
       logWindow.update("Classifiable texts saved. Wait...");
-    } catch (EmptyRecordException | NotExistsException e) {
+    } catch (NotExistsException e) {
       logWindow.update(e.getMessage());
     }
 
@@ -246,7 +246,7 @@ public class MainWindow extends Application {
       try {
         characteristicDAO.addCharacteristic(characteristic);
         logWindow.update("'" + characteristic.getName() + "' characteristic saved. Wait...");
-      } catch (EmptyRecordException | AlreadyExistsException e) {
+      } catch (AlreadyExistsException e) {
         logWindow.update(e.getMessage());
       }
     }
@@ -280,7 +280,7 @@ public class MainWindow extends Application {
     try {
       vocabularyWordDAO.addAll(new VocabularyBuilder(nGramStrategy).getVocabulary(classifiableTexts));
       logWindow.update("Vocabulary saved. Wait...");
-    } catch (EmptyRecordException | AlreadyExistsException e) {
+    } catch (AlreadyExistsException e) {
       logWindow.update(e.getMessage());
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public abstract class CharacteristicDAOTest {
   private CharacteristicDAO characteristicDAO;
@@ -44,16 +45,25 @@ public abstract class CharacteristicDAOTest {
     //
 
     Set<CharacteristicValue> modulePossibleValues = characteristics.get(0).getPossibleValues();
-    Iterator<CharacteristicValue> moduleIterator = modulePossibleValues.iterator();
-    CharacteristicValue valPM = moduleIterator.next();
-    CharacteristicValue valMM = moduleIterator.next();
+    CharacteristicValue valPM = null;
+    CharacteristicValue valMM = null;
+
+    for (CharacteristicValue characteristicValue : modulePossibleValues) {
+      if (characteristicValue.getOrderNumber() == 1) {
+        valPM = characteristicValue;
+      } else if (characteristicValue.getOrderNumber() == 2) {
+        valMM = characteristicValue;
+      }
+    }
 
     assertEquals(modulePossibleValues.size(), 2);
 
-    assertEquals(valPM.getId(), 1);
+    assertNotEquals(valPM, null);
+    assertEquals(valPM.getOrderNumber(), 1);
     assertEquals(valPM.getValue(), "PM");
 
-    assertEquals(valMM.getId(), 2);
+    assertNotEquals(valMM, null);
+    assertEquals(valMM.getOrderNumber(), 2);
     assertEquals(valMM.getValue(), "MM");
 
     // check Handler possible values
@@ -67,36 +77,14 @@ public abstract class CharacteristicDAOTest {
 
     assertEquals(handlerPossibleValues.size(), 3);
 
-    assertEquals(valUser1.getId(), 1);
+    assertEquals(valUser1.getOrderNumber(), 1);
     assertEquals(valUser1.getValue(), "User 1");
 
-    assertEquals(valUser2.getId(), 2);
+    assertEquals(valUser2.getOrderNumber(), 2);
     assertEquals(valUser2.getValue(), "User 2");
 
-    assertEquals(valUser3.getId(), 3);
+    assertEquals(valUser3.getOrderNumber(), 3);
     assertEquals(valUser3.getValue(), "User 3");
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addCharacteristicNull() throws Exception {
-    characteristicDAO.addCharacteristic(null);
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addCharacteristicEmpty() throws Exception {
-    Set<CharacteristicValue> possibleValues = new LinkedHashSet<>();
-    possibleValues.add(new CharacteristicValue("Value 1"));
-    characteristicDAO.addCharacteristic(new Characteristic("", possibleValues));
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addCharacteristicNullPossibleValues() throws Exception {
-    characteristicDAO.addCharacteristic(new Characteristic("Test", null));
-  }
-
-  @Test(expected = EmptyRecordException.class)
-  public void addCharacteristicEmptyPossibleValues() throws Exception {
-    characteristicDAO.addCharacteristic(new Characteristic("Test", new LinkedHashSet<>()));
   }
 
   @Test(expected = AlreadyExistsException.class)
@@ -123,21 +111,16 @@ public abstract class CharacteristicDAOTest {
 
     Iterator<CharacteristicValue> iterator = characteristic.getPossibleValues().iterator();
     CharacteristicValue valValue1 = iterator.next();
-    CharacteristicValue valEmpty = iterator.next();
-    CharacteristicValue valNull = iterator.next();
     CharacteristicValue valValue2 = iterator.next();
 
     assertEquals(characteristic.getId(), 3);
     assertEquals(characteristic.getName(), "Test");
 
-    assertEquals(characteristic.getPossibleValues().size(), 4);
+    assertEquals(characteristic.getPossibleValues().size(), 2);
 
-    assertEquals(valValue1.getId(), 1);
+    assertEquals(valValue1.getOrderNumber(), 1);
     assertEquals(valValue1.getValue(), "Value 1");
-    assertEquals(valEmpty.getId(), 0);
-    assertEquals(valEmpty.getValue(), "");
-    assertEquals(valNull, null);
-    assertEquals(valValue2.getId(), 2);
+    assertEquals(valValue2.getOrderNumber(), 2);
     assertEquals(valValue2.getValue(), "Value 2");
 
     // check record from DB
@@ -160,10 +143,10 @@ public abstract class CharacteristicDAOTest {
 
     assertEquals(testPossibleValues.size(), 2);
 
-    assertEquals(valTestValue1.getId(), 1);
+    assertEquals(valTestValue1.getOrderNumber(), 1);
     assertEquals(valTestValue1.getValue(), "Value 1");
 
-    assertEquals(valTestValue2.getId(), 2);
+    assertEquals(valTestValue2.getOrderNumber(), 2);
     assertEquals(valTestValue2.getValue(), "Value 2");
   }
 }
