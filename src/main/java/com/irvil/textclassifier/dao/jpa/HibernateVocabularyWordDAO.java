@@ -11,13 +11,20 @@ import java.util.List;
 import java.util.Set;
 
 public class HibernateVocabularyWordDAO implements VocabularyWordDAO {
-  private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence
-      .createEntityManagerFactory("TextClassifier");
+  private EntityManagerFactory entityManagerFactory;
+
+  public HibernateVocabularyWordDAO(EntityManagerFactory entityManagerFactory) {
+    if (entityManagerFactory == null) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entityManagerFactory = entityManagerFactory;
+  }
 
   @Override
   public List<VocabularyWord> getAll() {
     List<VocabularyWord> vocabulary = new ArrayList<>();
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -47,7 +54,7 @@ public class HibernateVocabularyWordDAO implements VocabularyWordDAO {
       return;
     }
 
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -80,7 +87,7 @@ public class HibernateVocabularyWordDAO implements VocabularyWordDAO {
   private boolean isVocabularyWordExistsInDB(VocabularyWord vocabularyWord) {
     VocabularyWord foundVocabularyWord = null;
 
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {

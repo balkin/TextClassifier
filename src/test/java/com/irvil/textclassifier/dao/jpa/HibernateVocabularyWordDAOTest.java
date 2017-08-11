@@ -1,18 +1,21 @@
 package com.irvil.textclassifier.dao.jpa;
 
-import com.irvil.textclassifier.Config;
 import com.irvil.textclassifier.dao.VocabularyWordDAOTest;
 import com.irvil.textclassifier.dao.factories.DAOFactory;
+import com.irvil.textclassifier.dao.factories.HibernateDAOFactory;
+import org.junit.AfterClass;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import javax.persistence.EntityManagerFactory;
 
 public class HibernateVocabularyWordDAOTest extends VocabularyWordDAOTest {
   @Override
   public DAOFactory createDAOFactory() {
-    Config cfg = mock(Config.class);
-    when(cfg.getDaoType()).thenReturn("hibernate");
+    EntityManagerFactory entityManagerFactory = EMFProvider.getInstance().getEntityManagerFactory("TextClassifier_test");
+    return new HibernateDAOFactory(entityManagerFactory);
+  }
 
-    return DAOFactory.getDaoFactory(cfg);
+  @AfterClass
+  public static void closeEntityManagerFactory() {
+    EMFProvider.getInstance().closeEntityManagerFactory();
   }
 }

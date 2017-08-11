@@ -12,14 +12,20 @@ import java.util.List;
 import java.util.Set;
 
 public class HibernateCharacteristicDAO implements CharacteristicDAO {
-  //todo: move to other place
-  private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence
-      .createEntityManagerFactory("TextClassifier");
+  private EntityManagerFactory entityManagerFactory;
+
+  public HibernateCharacteristicDAO(EntityManagerFactory entityManagerFactory) {
+    if (entityManagerFactory == null) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entityManagerFactory = entityManagerFactory;
+  }
 
   @Override
   public List<Characteristic> getAllCharacteristics() {
     Set<Characteristic> characteristics = new LinkedHashSet<>();
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -69,7 +75,7 @@ public class HibernateCharacteristicDAO implements CharacteristicDAO {
       }
     }
 
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -96,7 +102,7 @@ public class HibernateCharacteristicDAO implements CharacteristicDAO {
   Characteristic findCharacteristicByName(String characteristicName) {
     Characteristic characteristic = null;
 
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {

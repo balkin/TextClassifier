@@ -2,40 +2,26 @@ package com.irvil.textclassifier.dao.jpa;
 
 import com.irvil.textclassifier.dao.StorageCreator;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateDBCreator implements StorageCreator {
-  public Connection getConnection() throws SQLException {
-    try {
-      Class.forName("org.h2.Driver");
-    } catch (ClassNotFoundException ignored) {
+  private EntityManagerFactory entityManagerFactory;
+
+  public HibernateDBCreator(EntityManagerFactory entityManagerFactory) {
+    if (entityManagerFactory == null) {
+      throw new IllegalArgumentException();
     }
 
-    return DriverManager.getConnection("jdbc:h2:tcp://localhost/C:\\Users\\r.zakaryaev\\_data\\projects\\TextClassifier\\db\\hibernate_db;");
+    this.entityManagerFactory = entityManagerFactory;
   }
 
   @Override
   public void createStorage() {
     List<String> sqlQueries = new ArrayList<>();
-
-    // create database structure
-    //
-
-//    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsNames " +
-//        "(Id INT AUTO_INCREMENT PRIMARY KEY, Name CLOB )");
-//    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsValues " +
-//        "(Id INT, CharacteristicsNameId INT, Value CLOB, PRIMARY KEY(Id, CharacteristicsNameId))");
-//    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTexts " +
-//        "(Id INT AUTO_INCREMENT PRIMARY KEY, Text CLOB)");
-//    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTextsCharacteristics " +
-//        "(ClassifiableTextId INT, CharacteristicsNameId INT, CharacteristicsValueId INT, PRIMARY KEY(ClassifiableTextId, CharacteristicsNameId, CharacteristicsValueId))");
-//    sqlQueries.add("CREATE TABLE IF NOT EXISTS Vocabulary " +
-//        "(Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB)");
 
     // clear all tables
     //
@@ -57,17 +43,26 @@ public class HibernateDBCreator implements StorageCreator {
     // execute queries
     //
 
-    try (Connection con = getConnection()) {
-      Statement statement = con.createStatement();
+    EntityManager manager = entityManagerFactory.createEntityManager();
+    EntityTransaction transaction = null;
+
+    try {
+      transaction = manager.getTransaction();
+      transaction.begin();
 
       for (String sqlQuery : sqlQueries) {
-        try {
-          statement.execute(sqlQuery);
-        } catch (SQLException ignored) {
-          ignored.printStackTrace();
-        }
+        manager.createNativeQuery(sqlQuery).executeUpdate();
       }
-    } catch (SQLException ignored) {
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+
+      e.printStackTrace();
+    } finally {
+      manager.close();
     }
   }
 }

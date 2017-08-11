@@ -9,24 +9,36 @@ import com.irvil.textclassifier.dao.jpa.HibernateClassifiableTextDAO;
 import com.irvil.textclassifier.dao.jpa.HibernateDBCreator;
 import com.irvil.textclassifier.dao.jpa.HibernateVocabularyWordDAO;
 
+import javax.persistence.EntityManagerFactory;
+
 public class HibernateDAOFactory implements DAOFactory {
+  private EntityManagerFactory entityManagerFactory;
+
+  public HibernateDAOFactory(EntityManagerFactory entityManagerFactory) {
+    if (entityManagerFactory == null) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entityManagerFactory = entityManagerFactory;
+  }
+
   @Override
   public ClassifiableTextDAO classifiableTextDAO() {
-    return new HibernateClassifiableTextDAO();
+    return new HibernateClassifiableTextDAO(entityManagerFactory);
   }
 
   @Override
   public CharacteristicDAO characteristicDAO() {
-    return new HibernateCharacteristicDAO();
+    return new HibernateCharacteristicDAO(entityManagerFactory);
   }
 
   @Override
   public VocabularyWordDAO vocabularyWordDAO() {
-    return new HibernateVocabularyWordDAO();
+    return new HibernateVocabularyWordDAO(entityManagerFactory);
   }
 
   @Override
   public StorageCreator storageCreator() {
-    return new HibernateDBCreator();
+    return new HibernateDBCreator(entityManagerFactory);
   }
 }

@@ -8,6 +8,9 @@ import com.irvil.textclassifier.dao.VocabularyWordDAO;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCConnector;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCH2Connector;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCSQLiteConnector;
+import com.irvil.textclassifier.dao.jpa.EMFProvider;
+
+import javax.persistence.EntityManagerFactory;
 
 public interface DAOFactory {
   static DAOFactory getDaoFactory(Config config) {
@@ -34,7 +37,8 @@ public interface DAOFactory {
         // create factory
         daoFactory = new JDBCDAOFactory(jdbcConnector);
       } else if (config.getDaoType().equals("hibernate")) {
-        daoFactory = new HibernateDAOFactory();
+        EntityManagerFactory entityManagerFactory = EMFProvider.getInstance().getEntityManagerFactory("TextClassifier");
+        daoFactory = new HibernateDAOFactory(entityManagerFactory);
       }
     } catch (IllegalArgumentException e) {
       return null;

@@ -9,18 +9,24 @@ import com.irvil.textclassifier.model.ClassifiableText;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import java.sql.SQLException;
 import java.util.*;
 
 public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
-  private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence
-      .createEntityManagerFactory("TextClassifier");
+  private EntityManagerFactory entityManagerFactory;
+
+  public HibernateClassifiableTextDAO(EntityManagerFactory entityManagerFactory) {
+    if (entityManagerFactory == null) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entityManagerFactory = entityManagerFactory;
+  }
 
   @Override
   public List<ClassifiableText> getAll() {
     Set<ClassifiableText> classifiableTextsWithoutDuplicates = new LinkedHashSet<>();
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -52,7 +58,7 @@ public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
       return;
     }
 
-    EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+    EntityManager manager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = null;
 
     try {
@@ -95,7 +101,7 @@ public class HibernateClassifiableTextDAO implements ClassifiableTextDAO {
   private boolean fillCharacteristicNamesAndValuesIDs(ClassifiableText classifiableText) throws SQLException {
     //todo: refactor
     for (Map.Entry<Characteristic, CharacteristicValue> entry : classifiableText.getCharacteristics().entrySet()) {
-      Characteristic characteristic = new HibernateCharacteristicDAO().findCharacteristicByName(entry.getKey().getName());
+      Characteristic characteristic = new HibernateCharacteristicDAO(entityManagerFactory).findCharacteristicByName(entry.getKey().getName());
       boolean isFound = false;
 
       if (characteristic == null) {
