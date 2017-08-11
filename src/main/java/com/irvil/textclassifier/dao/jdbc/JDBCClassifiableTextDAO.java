@@ -61,9 +61,6 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
       //
 
       for (ClassifiableText classifiableText : classifiableTexts) {
-        // check
-        //
-
         if (classifiableText != null &&
             !classifiableText.getText().equals("") &&
             classifiableText.getCharacteristics() != null &&
@@ -103,6 +100,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
 
     String sqlSelect = "SELECT CharacteristicsNames.Id AS CharacteristicId, " +
         "CharacteristicsNames.Name AS CharacteristicName, " +
+        "CharacteristicsValues.Id AS CharacteristicValueId, " +
         "CharacteristicsValues.OrderNumber AS CharacteristicValueOrderNumber, " +
         "CharacteristicsValues.Value AS CharacteristicValue " +
         "FROM ClassifiableTextsCharacteristics " +
@@ -119,6 +117,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
     while (rs.next()) {
       Characteristic characteristic = new Characteristic(rs.getInt("CharacteristicId"), rs.getString("CharacteristicName"));
       CharacteristicValue characteristicValue = new CharacteristicValue(rs.getInt("CharacteristicValueOrderNumber"), rs.getString("CharacteristicValue"));
+      characteristicValue.setId(rs.getInt("CharacteristicValueId"));
       characteristics.put(characteristic, characteristicValue);
     }
 
@@ -140,7 +139,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
 
       if (rs.next()) {
         entry.getKey().setId(rs.getInt("CharacteristicId"));
-        entry.getValue().setOrderNumber(rs.getInt("CharacteristicValueId"));
+        entry.getValue().setId(rs.getInt("CharacteristicValueId"));
       } else {
         return false;
       }
@@ -154,7 +153,7 @@ public class JDBCClassifiableTextDAO implements ClassifiableTextDAO {
     PreparedStatement statement = con.prepareStatement(sqlInsert);
     statement.setInt(1, classifiableTextId);
     statement.setInt(2, characteristic.getId());
-    statement.setInt(3, characteristicValue.getOrderNumber());
+    statement.setInt(3, characteristicValue.getId());
     statement.executeUpdate();
   }
 }

@@ -139,8 +139,10 @@ public abstract class ClassifiableTextDAOTest {
     //
 
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristics().size(), 2);
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getId(), 2);
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getOrderNumber(), 2);
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getValue(), "MM");
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getId(), 3);
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getOrderNumber(), 1);
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getValue(), "User 1");
   }
