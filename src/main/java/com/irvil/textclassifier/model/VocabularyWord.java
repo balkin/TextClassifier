@@ -3,14 +3,14 @@ package com.irvil.textclassifier.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "VOCABULARY ")
+@Table(name = "Vocabulary")
 public class VocabularyWord {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "Id")
   private int id;
 
-  @Column(name = "VALUE")
+  @Column(name = "Value")
   private String value;
 
   public VocabularyWord() {

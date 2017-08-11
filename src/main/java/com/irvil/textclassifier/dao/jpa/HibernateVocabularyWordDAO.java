@@ -1,7 +1,6 @@
 package com.irvil.textclassifier.dao.jpa;
 
 import com.irvil.textclassifier.dao.AlreadyExistsException;
-import com.irvil.textclassifier.dao.EmptyRecordException;
 import com.irvil.textclassifier.dao.VocabularyWordDAO;
 import com.irvil.textclassifier.model.VocabularyWord;
 

@@ -1,27 +1,24 @@
 package com.irvil.textclassifier.model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.util.Map;
 
 @Entity
-@Table(name = "CLASSIFIABLETEXTS")
+@Table(name = "ClassifiableTexts")
 public class ClassifiableText {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "Id")
   private int id;
 
-  @Column(name = "TEXT", length = 10000)
+  @Column(name = "Text", length = 10000)
   private String text;
 
   @ManyToMany
-  @JoinTable(name = "CLASSIFIABLETEXTSCHARACTERISTICS",
-      joinColumns = @JoinColumn(name = "CLASSIFIABLETEXTID"),
-      inverseJoinColumns = @JoinColumn(name = "CHARACTERISTICSVALUEID"))
-  @MapKeyJoinColumn(name = "CHARACTERISTICSNAMEID")
+  @JoinTable(name = "ClassifiableTextsCharacteristics",
+      joinColumns = @JoinColumn(name = "ClassifiableTextId"),
+      inverseJoinColumns = @JoinColumn(name = "CharacteristicsValueId"))
+  @MapKeyJoinColumn(name = "CharacteristicsNameId")
   private Map<Characteristic, CharacteristicValue> characteristics;
 
   public ClassifiableText() {

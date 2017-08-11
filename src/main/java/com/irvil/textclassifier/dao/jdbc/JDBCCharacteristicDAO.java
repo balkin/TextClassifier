@@ -2,7 +2,6 @@ package com.irvil.textclassifier.dao.jdbc;
 
 import com.irvil.textclassifier.dao.AlreadyExistsException;
 import com.irvil.textclassifier.dao.CharacteristicDAO;
-import com.irvil.textclassifier.dao.EmptyRecordException;
 import com.irvil.textclassifier.dao.jdbc.connectors.JDBCConnector;
 import com.irvil.textclassifier.model.Characteristic;
 import com.irvil.textclassifier.model.CharacteristicValue;

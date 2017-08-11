@@ -3,21 +3,21 @@ package com.irvil.textclassifier.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CHARACTERISTICSVALUES")
+@Table(name = "CharacteristicsValues")
 public class CharacteristicValue {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "Id")
   private int id;
 
   @Column(name = "OrderNumber")
   private int orderNumber;
 
-  @Column(name = "VALUE")
+  @Column(name = "Value")
   private String value;
 
   @ManyToOne
-  @JoinColumn(name = "CHARACTERISTICSNAMEID", nullable = false)
+  @JoinColumn(name = "CharacteristicsNameId", nullable = false)
   private Characteristic characteristic;
 
   public CharacteristicValue() {
