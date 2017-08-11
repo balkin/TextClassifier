@@ -14,13 +14,16 @@ Application for text classification using neural networks.
 - JUnit (`junit:junit:4.12`)
 - H2 Database Engine (`com.h2database:h2:1.4.196`)
 - Mockito (`org.mockito:mockito-core:2.8.47`)
+- Hibernate ORM (`org.hibernate:hibernate-core:5.2.10.Final`, `org.hibernate:hibernate-entitymanager:5.2.10.Final`)
+- SLF4J (`org.slf4j:slf4j-log4j12:1.7.25`)
+- Javassist (`org.javassist:javassist:3.22.0-CR2`)
 
 ## Config.ini file description
 
 Parameter | Description | Possible values
 ------------ | ------------- | -------------
 db_path | Path for database files and trained classifiers | Example: ./db
-dao_type | Method of data storage and access | jdbc
+dao_type | Method of data storage and access | jdbc, hibernate
 dbms_type | Database management system | sqlite, h2
 db_filename | Database name | Example: TextClassifier
 ngram_strategy | Text splitting algorithm | unigram, filtered_unigram, bigram, filtered_bigram
