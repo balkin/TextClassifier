@@ -44,22 +44,22 @@ public abstract class ClassifiableTextDAOTest {
     //
 
     assertEquals(classifiableTexts.get(0).getCharacteristics().size(), 2);
-    assertEquals(classifiableTexts.get(0).getCharacteristicValue(new Characteristic("Module")).getOrderNumber(), 1);
-    assertEquals(classifiableTexts.get(0).getCharacteristicValue(new Characteristic("Module")).getValue(), "PM");
-    assertEquals(classifiableTexts.get(0).getCharacteristicValue(new Characteristic("Handler")).getOrderNumber(), 1);
-    assertEquals(classifiableTexts.get(0).getCharacteristicValue(new Characteristic("Handler")).getValue(), "User 1");
+    assertEquals(classifiableTexts.get(0).getCharacteristicValue("Module").getOrderNumber(), 1);
+    assertEquals(classifiableTexts.get(0).getCharacteristicValue("Module").getValue(), "PM");
+    assertEquals(classifiableTexts.get(0).getCharacteristicValue("Handler").getOrderNumber(), 1);
+    assertEquals(classifiableTexts.get(0).getCharacteristicValue("Handler").getValue(), "User 1");
 
     assertEquals(classifiableTexts.get(1).getCharacteristics().size(), 2);
-    assertEquals(classifiableTexts.get(1).getCharacteristicValue(new Characteristic("Module")).getOrderNumber(), 2);
-    assertEquals(classifiableTexts.get(1).getCharacteristicValue(new Characteristic("Module")).getValue(), "MM");
-    assertEquals(classifiableTexts.get(1).getCharacteristicValue(new Characteristic("Handler")).getOrderNumber(), 2);
-    assertEquals(classifiableTexts.get(1).getCharacteristicValue(new Characteristic("Handler")).getValue(), "User 2");
+    assertEquals(classifiableTexts.get(1).getCharacteristicValue("Module").getOrderNumber(), 2);
+    assertEquals(classifiableTexts.get(1).getCharacteristicValue("Module").getValue(), "MM");
+    assertEquals(classifiableTexts.get(1).getCharacteristicValue("Handler").getOrderNumber(), 2);
+    assertEquals(classifiableTexts.get(1).getCharacteristicValue("Handler").getValue(), "User 2");
 
     assertEquals(classifiableTexts.get(2).getCharacteristics().size(), 2);
-    assertEquals(classifiableTexts.get(2).getCharacteristicValue(new Characteristic("Module")).getOrderNumber(), 2);
-    assertEquals(classifiableTexts.get(2).getCharacteristicValue(new Characteristic("Module")).getValue(), "MM");
-    assertEquals(classifiableTexts.get(2).getCharacteristicValue(new Characteristic("Handler")).getOrderNumber(), 2);
-    assertEquals(classifiableTexts.get(2).getCharacteristicValue(new Characteristic("Handler")).getValue(), "User 2");
+    assertEquals(classifiableTexts.get(2).getCharacteristicValue("Module").getOrderNumber(), 2);
+    assertEquals(classifiableTexts.get(2).getCharacteristicValue("Module").getValue(), "MM");
+    assertEquals(classifiableTexts.get(2).getCharacteristicValue("Handler").getOrderNumber(), 2);
+    assertEquals(classifiableTexts.get(2).getCharacteristicValue("Handler").getValue(), "User 2");
   }
 
   @Test(expected = NotExistsException.class)
@@ -139,11 +139,11 @@ public abstract class ClassifiableTextDAOTest {
     //
 
     assertEquals(classifiableTextsFromDB.get(3).getCharacteristics().size(), 2);
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getId(), 2);
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getOrderNumber(), 2);
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Module")).getValue(), "MM");
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getId(), 3);
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getOrderNumber(), 1);
-    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue(new Characteristic("Handler")).getValue(), "User 1");
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Module").getId(), 2);
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Module").getOrderNumber(), 2);
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Module").getValue(), "MM");
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Handler").getId(), 3);
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Handler").getOrderNumber(), 1);
+    assertEquals(classifiableTextsFromDB.get(3).getCharacteristicValue("Handler").getValue(), "User 1");
   }
 }

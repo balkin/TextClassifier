@@ -198,7 +198,7 @@ public class Classifier implements Observable {
   // vector = {0, 0, 0, 1, 0}
   private double[] getCharacteristicAsVector(ClassifiableText classifiableText) {
     double[] vector = new double[outputLayerSize];
-    vector[classifiableText.getCharacteristicValue(characteristic).getOrderNumber() - 1] = 1;
+    vector[classifiableText.getCharacteristicValue(characteristic.getName()).getOrderNumber() - 1] = 1;
     return vector;
   }
 

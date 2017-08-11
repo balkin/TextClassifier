@@ -132,7 +132,7 @@ public class MainWindow extends Application {
       int correctlyClassified = 0;
 
       for (ClassifiableText classifiableText : classifiableTexts) {
-        CharacteristicValue idealValue = classifiableText.getCharacteristicValue(characteristic);
+        CharacteristicValue idealValue = classifiableText.getCharacteristicValue(characteristic.getName());
         CharacteristicValue classifiedValue = classifier.classify(classifiableText);
 
         if (classifiedValue.getValue().equals(idealValue.getValue())) {

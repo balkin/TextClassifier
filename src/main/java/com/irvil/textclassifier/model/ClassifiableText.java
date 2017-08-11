@@ -25,7 +25,6 @@ public class ClassifiableText {
   }
 
   public ClassifiableText(String text, Map<Characteristic, CharacteristicValue> characteristics) {
-    this.id = 0;
     this.text = text;
     this.characteristics = characteristics;
   }
@@ -42,8 +41,8 @@ public class ClassifiableText {
     return characteristics;
   }
 
-  public CharacteristicValue getCharacteristicValue(Characteristic characteristic) {
-    return characteristics.get(characteristic);
+  public CharacteristicValue getCharacteristicValue(String characteristicName) {
+    return characteristics.get(new Characteristic(characteristicName));
   }
 
   @Override
