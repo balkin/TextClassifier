@@ -14,7 +14,7 @@ public class ClassifiableText {
   @Column(name = "ID")
   private int id;
 
-  @Column(name = "TEXT")
+  @Column(name = "TEXT", length = 10000)
   private String text;
 
   @ManyToMany
