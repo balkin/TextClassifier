@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 // todo: add default configuration and create config file automatically
@@ -12,35 +13,38 @@ public class Config {
 
   public Config(String fileName) {
     // read config file
-    try (InputStream inputStream = new FileInputStream(new File(fileName))) {
-      properties.load(inputStream);
-    } catch (IOException ignored) {
-
-    }
+//	  URL resource = this.getClass().getResource("/");
+//	  File file = new File (fileName);
+//	  file.exists();
+//    try (InputStream inputStream = Config.class.getResourceAsStream(fileName)) {
+//      properties.load(inputStream);
+//    } catch (IOException ignored) {
+//
+//    }
   }
-
+		  
   public boolean isLoaded() {
-    return properties.size() > 0;
+    return true; //properties.size() > 0;
   }
 
   public String getDbPath() {
-    return getProperty("db_path");
+    return System.getProperty("user.dir") + "/../TextClassifier/db"; //  getProperty("db_path");
   }
 
   public String getDaoType() {
-    return getProperty("dao_type");
+    return "jdbc"; //getProperty("dao_type");
   }
 
   public String getDBMSType() {
-    return getProperty("dbms_type");
+    return "h2"; //getProperty("dbms_type");
   }
 
   public String getDbFileName() {
-    return getProperty("db_filename");
+    return "TextClassifier"; //getProperty("db_filename");
   }
 
   public String getNGramStrategy() {
-    return getProperty("ngram_strategy");
+    return "filtered_unigram"; //getProperty("ngram_strategy");
   }
 
   private String getProperty(String property) {

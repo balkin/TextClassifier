@@ -41,6 +41,7 @@ public class JDBCCharacteristicDAO implements CharacteristicDAO {
         characteristics.add(characteristic);
       }
     } catch (SQLException ignored) {
+    	System.out.println(ignored); 
     }
 
     return characteristics;

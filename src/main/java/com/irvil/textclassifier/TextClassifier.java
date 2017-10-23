@@ -44,7 +44,7 @@ public class TextClassifier {
 	public static void main(String[] args) {
 		try {
 			TextClassifier textClassifier = new TextClassifier();
-			System.out.println(textClassifier.classify("кредит"));
+			System.out.println(textClassifier.classify("кредиты"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
