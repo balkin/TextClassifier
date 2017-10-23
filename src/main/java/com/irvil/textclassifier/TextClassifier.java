@@ -56,6 +56,10 @@ public class TextClassifier {
 		try {
 			Classifier classifier = classifiers.get(0);
 			CharacteristicValue classifiedValue = classifier.classify(classifiableText);
+			if (classifiedValue == null) {
+				return null;
+			}
+			
 			return classifiedValue.getValue();
 		} catch (Exception e) {
 			throw new Exception("It seems that trained classifier does not match Characteristics and Vocabulary. "

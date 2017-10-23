@@ -30,6 +30,8 @@ import com.irvil.textclassifier.observer.Observer;
 public class Classifier implements Observable {
 	
     private static final int THREAD_COUNT = 16;
+
+	private static final double ACCEPTED_ACCURACY = 0.6;
     
 	int MAX_TRAIN_COUNT = 2000;
     double REQUIRED_ACCURACY =  0.01;
@@ -114,7 +116,21 @@ public class Classifier implements Observable {
   }
 
   private CharacteristicValue convertVectorToCharacteristic(double[] vector) {
-    int idOfMaxValue = getIdOfMaxValue(vector);
+    int indexOfMaxValue = 0;
+    double maxValue = vector[0];
+
+    for (int i = 1; i < vector.length; i++) {
+      if (vector[i] > maxValue) {
+        maxValue = vector[i];
+        indexOfMaxValue = i;
+      }
+    }
+    
+    if (maxValue < ACCEPTED_ACCURACY) {
+    	return null;  
+    }
+
+    int  idOfMaxValue =  indexOfMaxValue + 1;
 
     // find CharacteristicValue with found Id
     //
