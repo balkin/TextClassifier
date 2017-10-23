@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 class VocabularyBuilder {
   private final NGramStrategy nGramStrategy;
@@ -49,10 +50,16 @@ class VocabularyBuilder {
     List<VocabularyWord> vocabulary = new ArrayList<>();
 
     for (Map.Entry<String, Integer> entry : uniqueValues.entrySet()) {
-      if (entry.getValue() > 3) {
+    	// TODO almakarov
+//      if (entry.getValue() > 3) {
         vocabulary.add(new VocabularyWord(entry.getKey()));
-      }
+//      }
     }
+    
+    System.out.println("Значение - кол-во повторений");
+    for (Entry<String, Integer> f : uniqueValues.entrySet()) {
+		System.out.println(f.getKey() + " - " + f.getValue());
+	}
 
     // todo: throw exception if vocabulary is empty
     return vocabulary;

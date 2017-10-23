@@ -1,0 +1,8 @@
+2017-10-23 12:03:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "CHARACTERISTICSNAMES" не найдена
+Table "CHARACTERISTICSNAMES" not found; SQL statement:
+SELECT Id, Name FROM CharacteristicsNames [42102-196]
+2017-10-23 12:03:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "VOCABULARY" не найдена
+Table "VOCABULARY" not found; SQL statement:
+SELECT Id, Value FROM Vocabulary [42102-196]

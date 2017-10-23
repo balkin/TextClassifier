@@ -1,5 +1,23 @@
 package com.irvil.textclassifier.classifier;
 
+import static org.encog.persist.EncogDirectoryPersistence.loadObject;
+import static org.encog.persist.EncogDirectoryPersistence.saveObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.encog.Encog;
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.training.propagation.Propagation;
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.persist.PersistError;
+
 import com.irvil.textclassifier.model.Characteristic;
 import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
@@ -7,25 +25,16 @@ import com.irvil.textclassifier.model.VocabularyWord;
 import com.irvil.textclassifier.ngram.NGramStrategy;
 import com.irvil.textclassifier.observer.Observable;
 import com.irvil.textclassifier.observer.Observer;
-import org.encog.Encog;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.Propagation;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.encog.persist.PersistError;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.encog.persist.EncogDirectoryPersistence.loadObject;
-import static org.encog.persist.EncogDirectoryPersistence.saveObject;
 
 // todo: add other types of Classifiers (Naive Bayes classifier for example)
 public class Classifier implements Observable {
+	
+    private static final int THREAD_COUNT = 16;
+    
+	int MAX_TRAIN_COUNT = 2000;
+    double REQUIRED_ACCURACY =  0.01;
+	
+	
   private final Characteristic characteristic;
   private final int inputLayerSize;
   private final int outputLayerSize;
@@ -96,6 +105,10 @@ public class Classifier implements Observable {
     // calculate output vector
     network.compute(getTextAsVectorOfWords(classifiableText), output);
     Encog.getInstance().shutdown();
+    
+    for (int i = 0; i < output.length; i++) {
+		System.out.println(output[i]);
+	}
 
     return convertVectorToCharacteristic(output);
   }
@@ -146,18 +159,33 @@ public class Classifier implements Observable {
 
     double[][] input = getInput(classifiableTexts);
     double[][] ideal = getIdeal(classifiableTexts);
+    
+    classifiableTexts.forEach(t -> System.out.println(t.getCharacteristicValue(characteristic.getName()).getValue()));
 
     // train
     //
 
-    Propagation train = new ResilientPropagation(network, new BasicMLDataSet(input, ideal));
-    train.setThreadCount(16);
+//    Propagation train = new ResilientPropagation(network, new BasicMLDataSet(input, ideal));
+    
+    Propagation train = new Backpropagation(network, new BasicMLDataSet(input, ideal));
+    train.addStrategy(new MySmartLearningRate());
+    train.addStrategy(new MySmartMomentum());
+    
+    train.setThreadCount(THREAD_COUNT);
 
     // todo: throw exception if iteration count more than 1000
+    
+    int trainCount = 0;
     do {
+    	trainCount++;
       train.iteration();
       notifyObservers("Training Classifier for '" + characteristic.getName() + "' characteristic. Errors: " + String.format("%.2f", train.getError() * 100) + "%. Wait...");
-    } while (train.getError() > 0.01);
+
+      if (trainCount > MAX_TRAIN_COUNT) {
+    	  notifyObservers(" !!! trainCount is bigger " + MAX_TRAIN_COUNT + "! Error: " + String.format("%.2f", train.getError() * 100));
+    	  break;
+      }
+    } while (train.getError() > REQUIRED_ACCURACY);
 
     train.finishTraining();
     notifyObservers("Classifier for '" + characteristic.getName() + "' characteristic trained. Wait...");
@@ -211,11 +239,16 @@ public class Classifier implements Observable {
     // create vector
     //
 
+    System.out.println();
     for (String word : uniqueValues) {
       VocabularyWord vw = findWordInVocabulary(word);
 
       if (vw != null) { // word found in vocabulary
         vector[vw.getId() - 1] = 1;
+        // System.out.println("Нашел в словаре: " + word);
+        System.out.print(word + " ");
+      } else {
+    	  // System.out.println("Не нашел в словаре: " + word);
       }
     }
 

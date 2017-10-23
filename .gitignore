@@ -1,5 +1,4 @@
 .idea/
-db/
 etc/
 lib/
 log/
@@ -8,3 +7,4 @@ target/
 *.iml
 *.iws
 *.log
+/bin/
