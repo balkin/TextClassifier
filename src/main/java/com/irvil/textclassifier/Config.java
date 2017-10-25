@@ -4,27 +4,26 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
+
 
 // todo: add default configuration and create config file automatically
 public class Config {
   private final Properties properties = new Properties();
 
   public Config(String fileName) {
-    // read config file
-//	  URL resource = this.getClass().getResource("/");
-//	  File file = new File (fileName);
-//	  file.exists();
-//    try (InputStream inputStream = Config.class.getResourceAsStream(fileName)) {
-//      properties.load(inputStream);
-//    } catch (IOException ignored) {
-//
-//    }
+	File file = new File(fileName);
+	
+    try (InputStream inputStream = new FileInputStream(file)) {
+    	
+      properties.load(inputStream);
+    } catch (IOException e) {
+    	e.printStackTrace();
+    }
   }
 		  
   public boolean isLoaded() {
-    return true; //properties.size() > 0;
+    return properties.size() > 0;
   }
 
   public String getDbPath() {
@@ -32,19 +31,19 @@ public class Config {
   }
 
   public String getDaoType() {
-    return "jdbc"; //getProperty("dao_type");
+    return getProperty("dao_type");
   }
 
   public String getDBMSType() {
-    return "h2"; //getProperty("dbms_type");
+    return getProperty("dbms_type");
   }
 
   public String getDbFileName() {
-    return "TextClassifier"; //getProperty("db_filename");
+    return getProperty("db_filename");
   }
 
   public String getNGramStrategy() {
-    return "filtered_unigram"; //getProperty("ngram_strategy");
+    return getProperty("ngram_strategy");
   }
 
   private String getProperty(String property) {
