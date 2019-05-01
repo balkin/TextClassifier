@@ -133,7 +133,7 @@ public class MainWindow extends Application {
 
       for (ClassifiableText classifiableText : classifiableTexts) {
         CharacteristicValue idealValue = classifiableText.getCharacteristicValue(characteristic.getName());
-        CharacteristicValue classifiedValue = classifier.classify(classifiableText);
+        CharacteristicValue classifiedValue = classifier.classify(classifiableText).get(0);
 
         if (classifiedValue.getValue().equals(idealValue.getValue())) {
           correctlyClassified++;
@@ -319,7 +319,7 @@ public class MainWindow extends Application {
 
       try {
         for (Classifier classifier : classifiers) {
-          CharacteristicValue classifiedValue = classifier.classify(classifiableText);
+          CharacteristicValue classifiedValue = classifier.classify(classifiableText).get(0);
           classifiedCharacteristics.append(classifier.getCharacteristic().getName()).append(": ").append(classifiedValue.getValue()).append("\n");
         }
       } catch (Exception e) {

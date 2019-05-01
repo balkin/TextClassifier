@@ -101,7 +101,7 @@ public class Classifier implements Observable {
     return network;
   }
 
-  public CharacteristicValue classify(ClassifiableText classifiableText) {
+  public List<CharacteristicValue> classify(ClassifiableText classifiableText) {
     double[] output = new double[outputLayerSize];
 
     // calculate output vector
@@ -115,9 +115,12 @@ public class Classifier implements Observable {
     return convertVectorToCharacteristic(output);
   }
 
-  private CharacteristicValue convertVectorToCharacteristic(double[] vector) {
-    int indexOfMaxValue = 0;
+  private List<CharacteristicValue> convertVectorToCharacteristic(double[] vector) {
+    List<CharacteristicValue> result = new ArrayList<>();
+
+    /*int indexOfMaxValue = 0;
     double maxValue = vector[0];
+
 
     for (int i = 1; i < vector.length; i++) {
       if (vector[i] > maxValue) {
@@ -131,17 +134,20 @@ public class Classifier implements Observable {
     }
 
     int  idOfMaxValue =  indexOfMaxValue + 1;
+*/
 
     // find CharacteristicValue with found Id
     //
 
     for (CharacteristicValue c : characteristic.getPossibleValues()) {
-      if (c.getOrderNumber() == idOfMaxValue) {
+        c.setChanse(vector[c.getOrderNumber()-1]);
+        result.add(c);
+     /* if (c.getOrderNumber() == idOfMaxValue) {
         return c;
-      }
+      }*/
     }
 
-    return null;
+    return result;
   }
 
   private int getIdOfMaxValue(double[] vector) {

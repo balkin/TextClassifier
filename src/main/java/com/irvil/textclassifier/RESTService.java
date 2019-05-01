@@ -1,5 +1,6 @@
 package com.irvil.textclassifier;
 
+import com.google.gson.Gson;
 import com.irvil.textclassifier.classifier.Classifier;
 import com.irvil.textclassifier.dao.*;
 import com.irvil.textclassifier.dao.factories.DAOFactory;
@@ -8,9 +9,6 @@ import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
 import com.irvil.textclassifier.model.VocabularyWord;
 import com.irvil.textclassifier.ngram.NGramStrategy;
-import spark.Request;
-import spark.Response;
-import spark.ResponseTransformerRouteImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +91,7 @@ public class RESTService {
         }
 
         System.out.println("Starting REST server");
+        port(8081);
 
         get("/state", (req,res) -> {
            return (itFirstStart)?"restart":"ok";
@@ -107,32 +106,37 @@ public class RESTService {
 
                 String classifyText = req.queryMap().get("str").value();
 
+                System.out.println("POST:/classify, str = " + classifyText);
 
+                String str = "";
                 ClassifiableText classifiableText = new ClassifiableText(classifyText);
                 StringBuilder classifiedCharacteristics = new StringBuilder();
 
                 // start Classifier for each Characteristic from DB
                 //
 
+                Gson gson = new Gson();
                 try {
                     for (Classifier classifier : classifiers) {
-                        CharacteristicValue classifiedValue = classifier.classify(classifiableText);
-//                        classifiedCharacteristics.append(classifier.getCharacteristic().getName()).append(": ").append(classifiedValue.getValue()).append("\n");
-                        classifiedCharacteristics.append(classifiedValue.getValue());
+                        List<CharacteristicValue> characteristics1 = classifier.classify(classifiableText);
+                        return gson.toJson(characteristics1);
+
                     }
                 } catch (Exception e) {
                     // it is possible if DB was edited manually
                     /*return("It seems that trained classifier does not match Characteristics and Vocabulary. " +
                             "You need to retrain classifier.");*/
-                    return("not_classified");
+                    return("{error:\"not_classified\"");
                 }
 
-                return  classifiedCharacteristics.toString();
+
+                return  str;
 
 
 
             }
         });
+
 
 
 
@@ -154,7 +158,7 @@ public class RESTService {
 
             for (ClassifiableText classifiableText : classifiableTexts) {
                 CharacteristicValue idealValue = classifiableText.getCharacteristicValue(characteristic.getName());
-                CharacteristicValue classifiedValue = classifier.classify(classifiableText);
+                CharacteristicValue classifiedValue = classifier.classify(classifiableText).get(0);
 
                 if (classifiedValue.getValue().equals(idealValue.getValue())) {
                     correctlyClassified++;

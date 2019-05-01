@@ -16,6 +16,9 @@ public class CharacteristicValue {
   @Column(name = "Value")
   private String value;
 
+  @Column(name = "Chanse")
+  private double chanse;
+
   @ManyToOne
   @JoinColumn(name = "CharacteristicsNameId", nullable = false)
   private Characteristic characteristic;
@@ -54,6 +57,14 @@ public class CharacteristicValue {
 
   public String getValue() {
     return value;
+  }
+
+  public double getChanse() {
+    return chanse;
+  }
+
+  public void setChanse(double chanse) {
+    this.chanse = chanse;
   }
 
   @Override

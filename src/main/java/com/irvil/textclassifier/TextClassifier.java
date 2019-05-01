@@ -61,14 +61,14 @@ public class TextClassifier {
 
 		try {
 			Classifier classifier = classifiers.get(0);
-			CharacteristicValue classifiedValue = classifier.classify(classifiableText);
+			List<CharacteristicValue> classifiedValue = classifier.classify(classifiableText);
 			if (classifiedValue == null) {
 	            saveNotClassifiedText(text);
-				
+
 				return null;
 			}
 			
-			return classifiedValue.getValue();
+			return classifiedValue.get(0).getValue();
 		} catch (Exception e) {
 			throw new Exception("It seems that trained classifier does not match Characteristics and Vocabulary. "
 					+ "You need to retrain classifier.");
