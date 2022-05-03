@@ -13,9 +13,11 @@ import com.irvil.textclassifier.ngram.NGramStrategy;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import lombok.extern.slf4j.Slf4j;
 
 import static spark.Spark.*;
 
+@Slf4j
 public class RESTService {
 
     private static String TRAIN_FILE = "tt.xls";
@@ -25,13 +27,11 @@ public class RESTService {
     private static NGramStrategy nGramStrategy;
 
     public static void main(String[] args) {
-
-        System.out.println("Init system");
-
+        log.info("Init system");
 
         // check config file
         if (!config.isLoaded()) {
-            System.out.println("Config file is not found or it is empty.");
+            log.info("Config file is not found or it is empty.");
             return;
         }
 
@@ -40,7 +40,7 @@ public class RESTService {
         nGramStrategy = NGramStrategy.getNGramStrategy(config.getNGramStrategy());
 
         if (daoFactory == null || nGramStrategy == null) {
-            System.out.println("Oops, it seems there is an error in config file.");
+            log.info("Oops, it seems there is an error in config file.");
             return;
         }
 
@@ -52,7 +52,7 @@ public class RESTService {
         boolean itFirstStart = !loadTrainedClassifiers(characteristics, vocabulary, classifiers);
         // check if it is first start
         if (itFirstStart) {
-            System.out.println("WoW, firststart");
+            log.info("WoW, firststart");
 
             File file = new File(TRAIN_FILE);
 
@@ -76,44 +76,36 @@ public class RESTService {
                         trainAndSaveClassifiers(classifiableTextForTrain);
                         checkClassifiersAccuracy(file);
 
-                        System.out.println("\nPlease restart the program.");
+                        log.info("\nPlease restart the program.");
                     }
                 };
 
 
-                t.setUncaughtExceptionHandler((th, ex) -> System.out.println(ex.toString()));
+                t.setUncaughtExceptionHandler((th, ex) -> log.info(ex.toString()));
                 t.start();
             }
-
-
-        }else{
-
         }
 
-        System.out.println("Starting REST server");
-        port(8081);
+        log.info("Starting REST server");
+        port(8781);
 
         get("/state", (req,res) -> {
            return (itFirstStart)?"restart":"ok";
         });
 
-
         post("/classify",(req,res) ->{
-            if(itFirstStart){
+            if (itFirstStart) {
                 return "restart";
-            }else{
-
-
+            } else {
                 String classifyText = req.queryMap().get("str").value();
 
-                System.out.println("POST:/classify, str = " + classifyText);
+                log.info("POST:/classify, str = " + classifyText);
 
                 String str = "";
                 ClassifiableText classifiableText = new ClassifiableText(classifyText);
                 StringBuilder classifiedCharacteristics = new StringBuilder();
 
                 // start Classifier for each Characteristic from DB
-                //
 
                 Gson gson = new Gson();
                 try {
@@ -129,25 +121,13 @@ public class RESTService {
                     return("{error:\"not_classified\"");
                 }
 
-
                 return  str;
-
-
-
             }
         });
-
-
-
-
-
-
-
     }
 
-
     private static void checkClassifiersAccuracy(File file) {
-        System.out.println("\n");
+        log.info("\n");
 
         // read second sheet from a file
         List<ClassifiableText> classifiableTexts = getClassifiableTexts(file, 2);
@@ -166,10 +146,9 @@ public class RESTService {
             }
 
             double accuracy = ((double) correctlyClassified / classifiableTexts.size()) * 100;
-            System.out.println(String.format("Accuracy of Classifier for '" + characteristic.getName() + "' characteristic: %.2f%%", accuracy));
+            log.info(String.format("Accuracy of Classifier for '" + characteristic.getName() + "' characteristic: %.2f%%", accuracy));
         }
     }
-
 
     private static boolean loadTrainedClassifiers(List<Characteristic> characteristics, List<VocabularyWord> vocabulary, List<Classifier> classifiers) {
         if (characteristics.size() == 0 || vocabulary.size() == 0) {
@@ -202,7 +181,7 @@ public class RESTService {
         StorageCreator storageCreator = daoFactory.storageCreator();
         storageCreator.createStorageFolder(config.getDbPath());
         storageCreator.createStorage();
-        System.out.println("Storage created. Wait...");
+        log.info("Storage created. Wait...");
     }
 
     private boolean loadTrainedClassifiers(List<Characteristic> characteristics, List<VocabularyWord> vocabulary) {
@@ -239,9 +218,9 @@ public class RESTService {
 
         try {
             classifiableTextDAO.addAll(classifiableTexts);
-            System.out.println("Classifiable texts saved. Wait...");
+            log.info("Classifiable texts saved. Wait...");
         } catch (NotExistsException e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
         }
 
         // return classifiable texts from DB
@@ -256,9 +235,9 @@ public class RESTService {
         for (Characteristic characteristic : characteristics) {
             try {
                 characteristicDAO.addCharacteristic(characteristic);
-                System.out.println("'" + characteristic.getName() + "' characteristic saved. Wait...");
+                log.info("'" + characteristic.getName() + "' characteristic saved. Wait...");
             } catch (AlreadyExistsException e) {
-                System.out.println(e.getMessage());
+                log.info(e.getMessage());
             }
         }
 
@@ -290,9 +269,9 @@ public class RESTService {
 
         try {
             vocabularyWordDAO.addAll(new VocabularyBuilder(nGramStrategy).getVocabulary(classifiableTexts));
-            System.out.println("Vocabulary saved. Wait...");
+            log.info("Vocabulary saved. Wait...");
         } catch (AlreadyExistsException e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
         }
 
         // return vocabulary with IDs
@@ -305,7 +284,7 @@ public class RESTService {
         try {
             classifiableTexts = new ExcelFileReader().xlsxToClassifiableTexts(file, sheetNumber);
         } catch (IOException | EmptySheetException e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
         }
 
         return classifiableTexts;

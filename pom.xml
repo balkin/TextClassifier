@@ -69,6 +69,14 @@
             <artifactId>spark-core</artifactId>
             <version>2.9.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -80,6 +88,15 @@
                 <configuration>
                     <source>1.11</source>
                     <target>1.11</target>
+                    <annotationProcessors>
+                        <annotationProcessor>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.12</version>
+                            </path>
+                        </annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
         </plugins>

@@ -14,7 +14,9 @@ import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
 import com.irvil.textclassifier.model.VocabularyWord;
 import com.irvil.textclassifier.ngram.NGramStrategy;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TextClassifier {
 
 	private static final String NOT_CLASSIFIED_TEXT_FILE = "/test_db/NotClassifiedText.txt";
@@ -50,7 +52,7 @@ public class TextClassifier {
 	public static void main(String[] args) {
 		try {
 			TextClassifier textClassifier = new TextClassifier();
-			System.out.println(textClassifier.classify("кредиты"));
+			log.info(textClassifier.classify("кредиты"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
