@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.Lists;
 
 import static spark.Spark.*;
 
@@ -280,15 +281,14 @@ public class RESTService {
     }
 
     public static List<ClassifiableText> getClassifiableTexts(File file, int sheetNumber) {
-        final List<ClassifiableText> classifiableTexts = new ArrayList<>();
 
         try {
-            classifiableTexts = new ExcelFileReader().xlsxToClassifiableTexts(file, sheetNumber);
+            return new ExcelFileReader().xlsxToClassifiableTexts(file, sheetNumber);
         } catch (IOException | EmptySheetException e) {
             log.warn("Failed to get classifable texts", e);
+            return Lists.newArrayList();
         }
 
-        return classifiableTexts;
     }
 
 
