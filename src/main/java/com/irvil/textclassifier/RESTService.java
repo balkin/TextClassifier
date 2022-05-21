@@ -81,7 +81,7 @@ public class RESTService {
                 };
 
 
-                t.setUncaughtExceptionHandler((th, ex) -> log.info(ex.toString()));
+                t.setUncaughtExceptionHandler((th, ex) -> log.info("Uncaught", ex));
                 t.start();
             }
         }
@@ -220,7 +220,7 @@ public class RESTService {
             classifiableTextDAO.addAll(classifiableTexts);
             log.info("Classifiable texts saved. Wait...");
         } catch (NotExistsException e) {
-            log.info(e.getMessage());
+            log.info("FAILED: classifiableTextDAO.addAll", e);
         }
 
         // return classifiable texts from DB
@@ -239,7 +239,7 @@ public class RESTService {
                     log.info("'" + characteristic.getName() + "' characteristic saved. Wait...");
                 }
             } catch (AlreadyExistsException e) {
-                log.info(e.getMessage());
+                log.info("FAILED: saveCharacteristicsToStorage", e);
             }
         }
 
@@ -272,7 +272,7 @@ public class RESTService {
             vocabularyWordDAO.addAll(new VocabularyBuilder(nGramStrategy).getVocabulary(classifiableTexts));
             log.info("Vocabulary saved. Wait...");
         } catch (AlreadyExistsException e) {
-            log.info(e.getMessage());
+            log.info("FAILED: saveVocabularyToStorage", e);
         }
 
         // return vocabulary with IDs

@@ -46,8 +46,8 @@ class ExcelFileReader {
         // start from second row
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             final var row = sheet.getRow(i);
+            if (row.getLastCellNum() == -1) continue;
             Map<Characteristic, CharacteristicValue> characteristicsValues = getCharacteristicsValues(row, characteristics);
-
             // exclude empty rows
             final var stringCellValue = row.getCell(0).getStringCellValue();
             if (!stringCellValue.equals("")) {
