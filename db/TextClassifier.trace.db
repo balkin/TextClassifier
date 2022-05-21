@@ -1,8 +1,108 @@
-2017-10-23 12:03:09 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLException: Таблица "CHARACTERISTICSNAMES" не найдена
-Table "CHARACTERISTICSNAMES" not found; SQL statement:
-SELECT Id, Name FROM CharacteristicsNames [42102-196]
-2017-10-23 12:03:09 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLException: Таблица "VOCABULARY" не найдена
-Table "VOCABULARY" not found; SQL statement:
-SELECT Id, Value FROM Vocabulary [42102-196]
+2022-05-04 01:00:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSNAMES" not found (this database is empty); SQL statement:
+SELECT Id, Name FROM CharacteristicsNames [42104-212]
+2022-05-04 01:00:44 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT Id, [*]Value FROM Vocabulary"; expected "*, INTERSECTS, NOT, EXISTS, UNIQUE, INTERSECTS"; SQL statement:
+SELECT Id, Value FROM Vocabulary [42001-212]
+2022-05-04 01:02:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSNAMES" not found (this database is empty); SQL statement:
+SELECT Id, Name FROM CharacteristicsNames [42104-212]
+2022-05-04 01:02:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT Id, [*]Value FROM Vocabulary"; expected "*, INTERSECTS, NOT, EXISTS, UNIQUE, INTERSECTS"; SQL statement:
+SELECT Id, Value FROM Vocabulary [42001-212]
+2022-05-04 01:06:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 01:06:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT Id, [*]Value FROM Vocabulary"; expected "*, INTERSECTS, NOT, EXISTS, UNIQUE, INTERSECTS"; SQL statement:
+SELECT Id, Value FROM Vocabulary [42001-212]
+2022-05-04 01:10:51 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 01:11:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT Id, [*]Value FROM Vocabulary"; expected "*, INTERSECTS, NOT, EXISTS, UNIQUE, INTERSECTS"; SQL statement:
+SELECT Id, Value FROM Vocabulary [42001-212]
+2022-05-04 03:13:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:15:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:15:51 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:16:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:17:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:31:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:32:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:33:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:36:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:43:14 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-04 03:43:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOCABULARY" not found; SQL statement:
+INSERT INTO Vocabulary (Value) VALUES (?) [42102-212]
+2022-05-04 03:43:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+SELECT OrderNumber FROM CharacteristicsValues WHERE CharacteristicsNameId = ? AND Value = ? [42102-212]
+2022-05-04 03:43:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+SELECT OrderNumber FROM CharacteristicsValues WHERE CharacteristicsNameId = ? AND Value = ? [42102-212]
+2022-05-04 03:43:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLASSIFIABLETEXTS" not found; SQL statement:
+INSERT INTO ClassifiableTexts (Text) VALUES (?) [42102-212]
+2022-05-21 16:50:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-21 16:50:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOCABULARY" not found; SQL statement:
+INSERT INTO Vocabulary (Value) VALUES (?) [42102-212]
+2022-05-21 16:50:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLASSIFIABLETEXTS" not found; SQL statement:
+INSERT INTO ClassifiableTexts (Text) VALUES (?) [42102-212]
+2022-05-21 16:52:15 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS CharacteristicsValues (Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB) [42001-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS Vocabulary (Id INT AUTO_INCREMENT PRIMARY KEY, [*]Value CLOB)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS Vocabulary (Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB) [42001-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOCABULARY" not found; SQL statement:
+DELETE FROM Vocabulary [42102-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+DELETE FROM CharacteristicsValues [42102-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+ALTER TABLE CharacteristicsValues ALTER COLUMN Id RESTART WITH 1 [42102-212]
+2022-05-21 16:53:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOCABULARY" not found; SQL statement:
+ALTER TABLE Vocabulary ALTER COLUMN Id RESTART WITH 1 [42102-212]
+2022-05-21 16:53:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOCABULARY" not found; SQL statement:
+INSERT INTO Vocabulary (Value) VALUES (?) [42102-212]
+2022-05-21 16:53:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+SELECT OrderNumber FROM CharacteristicsValues WHERE CharacteristicsNameId = ? AND Value = ? [42102-212]
+2022-05-21 16:53:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+SELECT OrderNumber FROM CharacteristicsValues WHERE CharacteristicsNameId = ? AND Value = ? [42102-212]
+2022-05-21 16:53:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CHARACTERISTICSVALUES" not found; SQL statement:
+SELECT CharacteristicsNames.Id AS CharacteristicId, CharacteristicsValues.Id AS CharacteristicValueId FROM CharacteristicsValues JOIN CharacteristicsNames ON CharacteristicsValues.CharacteristicsNameId = CharacteristicsNames.Id WHERE CharacteristicsNames.Name = ? AND CharacteristicsValues.Value = ? [42102-212]

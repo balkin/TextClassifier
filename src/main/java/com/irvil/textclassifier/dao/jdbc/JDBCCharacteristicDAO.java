@@ -28,19 +28,17 @@ public class JDBCCharacteristicDAO implements CharacteristicDAO {
 
     @Override
     public List<Characteristic> getAllCharacteristics() {
-        List<Characteristic> characteristics = new ArrayList<>();
+        final List<Characteristic> characteristics = new ArrayList<>();
 
         try (Connection con = connector.getConnection()) {
-            String sqlSelect = "SELECT Id, Name FROM CharacteristicsNames";
-            PreparedStatement statement = con.prepareStatement(sqlSelect);
-            ResultSet rs = statement.executeQuery();
+            final String sqlSelect = "SELECT Id, Name FROM CharacteristicsNames";
+            final PreparedStatement statement = con.prepareStatement(sqlSelect);
+            final ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
-                Characteristic characteristic = new Characteristic(rs.getInt("Id"), rs.getString("Name"));
-
+                final Characteristic characteristic = new Characteristic(rs.getInt("Id"), rs.getString("Name"));
                 // get all possible values
                 characteristic.setPossibleValues(getAllPossibleValues(con, characteristic));
-
                 characteristics.add(characteristic);
             }
         } catch (SQLException ex) {

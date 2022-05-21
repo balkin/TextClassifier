@@ -30,7 +30,6 @@ public interface DAOFactory {
                 else if (dbmsType.equals("h2")) {
                     jdbcConnector = new JDBCH2Connector(dbPath, dbFileName);
                 }
-                jdbcConnector.createStorage();
 
                 // create factory
                 return new JDBCDAOFactory(jdbcConnector);
