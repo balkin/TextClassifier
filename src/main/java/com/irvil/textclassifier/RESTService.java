@@ -252,14 +252,13 @@ public class RESTService {
 
         for (ClassifiableText classifiableText : classifiableTexts) {
             // for all classifiable texts characteristic values
-            //
-
-            for (Map.Entry<Characteristic, CharacteristicValue> entry : classifiableText.getCharacteristics().entrySet()) {
+            final var characteristicsEntries = classifiableText.getCharacteristics().entrySet();
+            for (Map.Entry<Characteristic, CharacteristicValue> entry : characteristicsEntries) {
                 // add characteristic to catalog
-                characteristics.put(entry.getKey(), entry.getKey());
-
+                final var characteristicKey = entry.getKey();
+                characteristics.put(characteristicKey, characteristicKey);
                 // add characteristic value to possible values
-                characteristics.get(entry.getKey()).addPossibleValue(entry.getValue());
+                characteristics.get(characteristicKey).addPossibleValue(entry.getValue());
             }
         }
 
