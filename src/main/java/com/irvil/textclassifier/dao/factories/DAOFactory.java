@@ -13,45 +13,42 @@ import com.irvil.textclassifier.dao.jpa.EMFProvider;
 import javax.persistence.EntityManagerFactory;
 
 public interface DAOFactory {
-  static DAOFactory getDaoFactory(Config config) {
-    DAOFactory daoFactory = null;
 
-    // create DAO factory depends on config values
-    //
+    static DAOFactory getDaoFactory(Config config) {
+        try {
+            final var daoType = config.getDaoType();
+            if (daoType.equals("jdbc")) {
+                // create connector depends on config value
+                final var dbmsType = config.getDBMSType();
+                final var dbPath = config.getDbPath();
+                final var dbFileName = config.getDbFileName();
 
-    try {
-      if (config.getDaoType().equals("jdbc")) {
-        // create connector depends on config value
-        //
+                JDBCConnector jdbcConnector = null;
+                if (dbmsType.equals("sqlite")) {
+                    jdbcConnector = new JDBCSQLiteConnector(dbPath, dbFileName);
+                }
+                else if (dbmsType.equals("h2")) {
+                    jdbcConnector = new JDBCH2Connector(dbPath, dbFileName);
+                }
+                jdbcConnector.createStorage();
 
-        JDBCConnector jdbcConnector = null;
-
-        if (config.getDBMSType().equals("sqlite")) {
-          jdbcConnector = new JDBCSQLiteConnector(config.getDbPath(), config.getDbFileName());
+                // create factory
+                return new JDBCDAOFactory(jdbcConnector);
+            } else if (daoType.equals("hibernate")) {
+                EntityManagerFactory entityManagerFactory = EMFProvider.getInstance().getEntityManagerFactory("TextClassifier");
+                return new HibernateDAOFactory(entityManagerFactory);
+            }
+        } catch (IllegalArgumentException e) {
+            return null;
         }
-
-        if (config.getDBMSType().equals("h2")) {
-          jdbcConnector = new JDBCH2Connector(config.getDbPath(), config.getDbFileName());
-        }
-
-        // create factory
-        daoFactory = new JDBCDAOFactory(jdbcConnector);
-      } else if (config.getDaoType().equals("hibernate")) {
-        EntityManagerFactory entityManagerFactory = EMFProvider.getInstance().getEntityManagerFactory("TextClassifier");
-        daoFactory = new HibernateDAOFactory(entityManagerFactory);
-      }
-    } catch (IllegalArgumentException e) {
-      return null;
+        return null;
     }
 
-    return daoFactory;
-  }
+    ClassifiableTextDAO classifiableTextDAO();
 
-  ClassifiableTextDAO classifiableTextDAO();
+    CharacteristicDAO characteristicDAO();
 
-  CharacteristicDAO characteristicDAO();
+    VocabularyWordDAO vocabularyWordDAO();
 
-  VocabularyWordDAO vocabularyWordDAO();
-
-  StorageCreator storageCreator();
+    StorageCreator storageCreator();
 }

@@ -2,6 +2,7 @@ package com.irvil.textclassifier;
 
 import com.irvil.textclassifier.classifier.Classifier;
 import com.irvil.textclassifier.dao.factories.DAOFactory;
+import com.irvil.textclassifier.errors.ClassifierException;
 import com.irvil.textclassifier.model.Characteristic;
 import com.irvil.textclassifier.model.CharacteristicValue;
 import com.irvil.textclassifier.model.ClassifiableText;
@@ -44,6 +45,9 @@ public class TextClassifier {
         for (Characteristic characteristic : characteristics) {
             File tf = Path.of(config.getDbPath(), characteristic.getName() + "NeuralNetworkClassifier").toFile();
             classifiers.add(new Classifier(tf, characteristic, vocabulary, nGramStrategy));
+        }
+        if (classifiers.isEmpty()) {
+            throw new ClassifierException("Classifier list is empty");
         }
     }
 

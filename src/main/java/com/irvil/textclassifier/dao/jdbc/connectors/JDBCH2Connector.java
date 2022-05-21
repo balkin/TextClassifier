@@ -6,77 +6,82 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JDBCH2Connector implements JDBCConnector {
-  private final String dbPath;
-  private final String dbFileName;
-  private final String dbName;
 
-  public JDBCH2Connector(String dbPath, String dbFileName) {
-    if (dbFileName == null || dbFileName.equals("")) {
-      throw new IllegalArgumentException();
+    private final String dbPath;
+    private final String dbFileName;
+    private final String dbName;
+
+    public JDBCH2Connector(String dbPath, String dbFileName) {
+        if (dbFileName == null || dbFileName.equals("")) {
+            throw new IllegalArgumentException("DB filename is empty");
+        }
+
+        this.dbPath = dbPath;
+        this.dbFileName = dbFileName;
+        this.dbName = dbPath + "/" + dbFileName;
     }
 
-    this.dbPath = dbPath;
-    this.dbFileName = dbFileName;
-    this.dbName = dbPath + "/" + dbFileName;
-  }
+    @Override
+    public Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException ignored) {
+        }
 
-  @Override
-  public Connection getConnection() throws SQLException {
-    try {
-      Class.forName("org.h2.Driver");
-    } catch (ClassNotFoundException ignored) {
+        final var jdbcUrl = "jdbc:h2:" + dbName;
+        log.info("JDBC URL: {}", jdbcUrl);
+        return DriverManager.getConnection(jdbcUrl);
     }
 
-    return DriverManager.getConnection("jdbc:h2:" + dbName);
-  }
+    @Override
+    public void createStorage() {
+        List<String> sqlQueries = new ArrayList<>();
 
-  @Override
-  public void createStorage() {
-    List<String> sqlQueries = new ArrayList<>();
+        // create database structure
 
-    // create database structure
-    //
+        sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsNames " +
+            "(Id INT AUTO_INCREMENT PRIMARY KEY, Name CLOB )");
+        sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsValues " +
+            "(Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB)");
+        sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTexts " +
+            "(Id INT AUTO_INCREMENT PRIMARY KEY, Text CLOB)");
+        sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTextsCharacteristics " +
+            "(ClassifiableTextId INT, CharacteristicsNameId INT, CharacteristicsValueId INT, PRIMARY KEY(ClassifiableTextId, CharacteristicsNameId, CharacteristicsValueId))");
+        sqlQueries.add("CREATE TABLE IF NOT EXISTS Vocabulary " +
+            "(Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB)");
 
-    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsNames " +
-        "(Id INT AUTO_INCREMENT PRIMARY KEY, Name CLOB )");
-    sqlQueries.add("CREATE TABLE IF NOT EXISTS CharacteristicsValues " +
-        "(Id INT AUTO_INCREMENT PRIMARY KEY, OrderNumber INT, CharacteristicsNameId INT, Value CLOB)");
-    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTexts " +
-        "(Id INT AUTO_INCREMENT PRIMARY KEY, Text CLOB)");
-    sqlQueries.add("CREATE TABLE IF NOT EXISTS ClassifiableTextsCharacteristics " +
-        "(ClassifiableTextId INT, CharacteristicsNameId INT, CharacteristicsValueId INT, PRIMARY KEY(ClassifiableTextId, CharacteristicsNameId, CharacteristicsValueId))");
-    sqlQueries.add("CREATE TABLE IF NOT EXISTS Vocabulary " +
-        "(Id INT AUTO_INCREMENT PRIMARY KEY, Value CLOB)");
+        // clear all tables
 
-    // clear all tables
-    //
+        sqlQueries.add("DELETE FROM Vocabulary");
+        sqlQueries.add("DELETE FROM ClassifiableTextsCharacteristics");
+        sqlQueries.add("DELETE FROM ClassifiableTexts");
+        sqlQueries.add("DELETE FROM CharacteristicsValues");
+        sqlQueries.add("DELETE FROM CharacteristicsNames");
 
-    sqlQueries.add("DELETE FROM Vocabulary");
-    sqlQueries.add("DELETE FROM ClassifiableTextsCharacteristics");
-    sqlQueries.add("DELETE FROM ClassifiableTexts");
-    sqlQueries.add("DELETE FROM CharacteristicsValues");
-    sqlQueries.add("DELETE FROM CharacteristicsNames");
+        // reset all autoincrement keys
 
-    // reset all autoincrement keys
-    //
+        sqlQueries.add("ALTER TABLE CharacteristicsNames ALTER COLUMN Id RESTART WITH 1");
+        sqlQueries.add("ALTER TABLE CharacteristicsValues ALTER COLUMN Id RESTART WITH 1");
+        sqlQueries.add("ALTER TABLE ClassifiableTexts ALTER COLUMN Id RESTART WITH 1");
+        sqlQueries.add("ALTER TABLE Vocabulary ALTER COLUMN Id RESTART WITH 1");
 
-    sqlQueries.add("ALTER TABLE CharacteristicsNames ALTER COLUMN Id RESTART WITH 1");
-    sqlQueries.add("ALTER TABLE CharacteristicsValues ALTER COLUMN Id RESTART WITH 1");
-    sqlQueries.add("ALTER TABLE ClassifiableTexts ALTER COLUMN Id RESTART WITH 1");
-    sqlQueries.add("ALTER TABLE Vocabulary ALTER COLUMN Id RESTART WITH 1");
+        // execute queries
 
-    // execute queries
-    //
-
-    try (Connection con = getConnection()) {
-      Statement statement = con.createStatement();
-
-      for (String sqlQuery : sqlQueries) {
-        statement.execute(sqlQuery);
-      }
-    } catch (SQLException ignored) {
+        try (Connection con = getConnection()) {
+            final Statement statement = con.createStatement();
+            for (String sqlQuery : sqlQueries) {
+                try {
+                    statement.execute(sqlQuery);
+                }
+                catch (SQLException ex) {
+                    log.warn("SQL FAILED: {}", sqlQuery);
+                }
+            }
+        } catch (SQLException ignored) {
+        }
     }
-  }
 }

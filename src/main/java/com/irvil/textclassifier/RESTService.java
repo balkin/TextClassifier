@@ -20,7 +20,7 @@ import static spark.Spark.*;
 @Slf4j
 public class RESTService {
 
-    private static String TRAIN_FILE = "tt.xls";
+    private static String TRAIN_FILE = "mersin_realty.xlsx";
     private static final Config config = new Config("./config/config.ini");
     private static List<Classifier> classifiers = new ArrayList<>();
     private static DAOFactory daoFactory;
@@ -52,9 +52,8 @@ public class RESTService {
         boolean itFirstStart = !loadTrainedClassifiers(characteristics, vocabulary, classifiers);
         // check if it is first start
         if (itFirstStart) {
-            log.info("WoW, firststart");
-
-            File file = new File(TRAIN_FILE);
+            final File file = new File(TRAIN_FILE);
+            log.info("WoW, firststart: {}", file.getAbsolutePath());
 
             if (file != null) {
 
@@ -213,7 +212,7 @@ public class RESTService {
         Classifier.shutdown();
     }
 
-    private static List<ClassifiableText> saveClassifiableTextsToStorage(List<ClassifiableText> classifiableTexts) {
+    protected static List<ClassifiableText> saveClassifiableTextsToStorage(List<ClassifiableText> classifiableTexts) {
         ClassifiableTextDAO classifiableTextDAO = daoFactory.classifiableTextDAO();
 
         try {
@@ -227,15 +226,17 @@ public class RESTService {
         return classifiableTextDAO.getAll();
     }
 
-    private static List<Characteristic> saveCharacteristicsToStorage(List<ClassifiableText> classifiableTexts) {
+    protected static List<Characteristic> saveCharacteristicsToStorage(List<ClassifiableText> classifiableTexts) {
         Set<Characteristic> characteristics = getCharacteristicsCatalog(classifiableTexts);
 
         CharacteristicDAO characteristicDAO = daoFactory.characteristicDAO();
 
         for (Characteristic characteristic : characteristics) {
             try {
-                characteristicDAO.addCharacteristic(characteristic);
-                log.info("'" + characteristic.getName() + "' characteristic saved. Wait...");
+                final var saved = characteristicDAO.addCharacteristic(characteristic);
+                if (saved != null) {
+                    log.info("'" + characteristic.getName() + "' characteristic saved. Wait...");
+                }
             } catch (AlreadyExistsException e) {
                 log.info(e.getMessage());
             }
@@ -245,7 +246,7 @@ public class RESTService {
         return characteristicDAO.getAllCharacteristics();
     }
 
-    private static Set<Characteristic> getCharacteristicsCatalog(List<ClassifiableText> classifiableTexts) {
+    protected static Set<Characteristic> getCharacteristicsCatalog(List<ClassifiableText> classifiableTexts) {
         Map<Characteristic, Characteristic> characteristics = new HashMap<>();
 
         for (ClassifiableText classifiableText : classifiableTexts) {
@@ -264,7 +265,7 @@ public class RESTService {
         return characteristics.keySet();
     }
 
-    private static List<VocabularyWord> saveVocabularyToStorage(List<ClassifiableText> classifiableTexts) {
+    protected static List<VocabularyWord> saveVocabularyToStorage(List<ClassifiableText> classifiableTexts) {
         VocabularyWordDAO vocabularyWordDAO = daoFactory.vocabularyWordDAO();
 
         try {
@@ -278,13 +279,13 @@ public class RESTService {
         return vocabularyWordDAO.getAll();
     }
 
-    private static List<ClassifiableText> getClassifiableTexts(File file, int sheetNumber) {
-        List<ClassifiableText> classifiableTexts = new ArrayList<>();
+    public static List<ClassifiableText> getClassifiableTexts(File file, int sheetNumber) {
+        final List<ClassifiableText> classifiableTexts = new ArrayList<>();
 
         try {
             classifiableTexts = new ExcelFileReader().xlsxToClassifiableTexts(file, sheetNumber);
         } catch (IOException | EmptySheetException e) {
-            log.info(e.getMessage());
+            log.warn("Failed to get classifable texts", e);
         }
 
         return classifiableTexts;
